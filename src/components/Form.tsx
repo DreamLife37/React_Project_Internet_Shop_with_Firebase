@@ -1,7 +1,11 @@
-import {useState} from "react"
+import {useState, FC} from "react"
 
-// @ts-ignore
-export const Form = ({title, handleClick}) => {
+type FormType = {
+    title: string,
+    handleClick: (email: string, password: string) => void
+}
+
+export const Form: FC<FormType> = ({title, handleClick}) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     return <div>

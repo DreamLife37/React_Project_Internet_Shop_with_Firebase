@@ -1,9 +1,9 @@
 import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
 import {Form} from "./Form";
-import {useAppDispatch} from "../app/store";
 import {setAuthData} from "../app/slices/authSlice";
 import {useNavigate} from "react-router-dom";
 import React from "react";
+import {useAppDispatch} from "../hooks/redux-hooks";
 
 export type ResponseType = {
     accessToken: string
@@ -19,9 +19,7 @@ export const Login = () => {
         const auth = getAuth();
         signInWithEmailAndPassword(auth, email, password)
             .then(({user}) => {
-                console.log(user)
-                // @ts-ignore
-                dispatch(setAuthData({email: user.email, token: user.accessToken, id: user.uid}))
+                dispatch(setAuthData({email: user.email, token: user.refreshToken, id: user.uid}))
                 return navigation("/")
             })
             .catch(console.error)

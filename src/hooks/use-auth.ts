@@ -1,8 +1,7 @@
-import {useAppSelector} from "../app/store";
-import {useSelector} from "react-redux";
+import {useAppSelector} from "./redux-hooks"
 
 export function useAuth() {
-    // @ts-ignore
+
     const {email, token, id} = useAppSelector(state => state.auth)
 
     return {
