@@ -1,6 +1,6 @@
 import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
 import {Form} from "./Form";
-import {setAuthData} from "../app/slices/authSlice";
+import {setAuthData} from "../store/slices/authSlice";
 import {useNavigate} from "react-router-dom";
 import React from "react";
 import {useAppDispatch} from "../hooks/redux-hooks";
