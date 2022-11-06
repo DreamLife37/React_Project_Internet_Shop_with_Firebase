@@ -1,10 +1,10 @@
 import s from './Cart.module.css'
-import {collection, doc, onSnapshot, query} from "firebase/firestore";
+import {doc, onSnapshot} from "firebase/firestore";
 import {db} from "../../firebase";
-import {setDataProducts} from "../../store/slices/productSlice";
+import {setDataCart, setDataProducts} from "../../store/slices/productSlice";
 import {useAuth} from "../../hooks/use-auth";
 import React, {useEffect, useState} from "react";
-import {useAppSelector} from "../../hooks/redux-hooks";
+import {useAppDispatch, useAppSelector} from "../../hooks/redux-hooks";
 import {ItemCart} from "./ItemCart/ItemCart";
 import {Link, Navigate} from "react-router-dom";
 
@@ -13,22 +13,44 @@ export type ItemCartType = {
     title: string,
     idItem: string,
     price: number,
-    count: number
+    count: number,
 }
 
 export const Cart = () => {
 
     const {id, isAuth} = useAuth()
+    const dispatch = useAppDispatch()
 
     const cart = useAppSelector(state => state.products.cart)
     console.log(cart)
 
 
+    useEffect(() => {
+        if (id != null) {
+            const cartRef = doc(db, '/cart', id)
+            const unsubscribe = onSnapshot(cartRef, (itemCart) => {
+                if (itemCart.exists()) {
+                    console.log(itemCart.data().cart)
+                    //setCart(ItemCart.data().cart)
+                    debugger
+                    dispatch(setDataCart(itemCart.data().cart))
+                } else {
+                    console.log("No items in Cart")
+                }
+                //dispatch(setDataProducts(querySnapshot.docs.map(doc => ({...doc.data(), id: doc.id}))));
+                // console.log(querySnapshot.docs.map(doc => ({...doc.data(), id: doc.id})));
+            });
+            return () => {
+                unsubscribe()
+            }
+        }
+    }, [])
+
+
     let total = 0;
     for (let i in cart.items) {
-        total += cart.items[i].price;
+        total += cart.items[i].price * cart.items[i].count;
     }
-    console.log(total)
 
     // useEffect(() => {
     //     if (id != null) {
@@ -60,14 +82,14 @@ export const Cart = () => {
         <div className={s.cart}>
             <Link to={'/'}>На домашнюю страницу</Link>
             {cart.items.map((i) => {
-                let amount1 = +i.price
-                console.log(amount1)
                 return <ItemCart key={i.idItem}
                                  idItem={i.idItem}
                                  image={i.image}
                                  price={i.price}
                                  title={i.title}
-                                 count={i.count}/>
+                                 count={i.count}
+                                 amount={i.price * i.count}
+                />
 
             })}
 

@@ -1,6 +1,7 @@
 import s from './ProductInCatalog.module.css'
 import {FC} from "react";
-import {AddToCartType} from "../../pages/HomePage";
+import {useAppDispatch, useAppSelector} from "../../hooks/redux-hooks";
+import {addToCartTC, updateItemCartTC} from "../../store/slices/productSlice";
 
 
 export type ProductInCatalogType = {
@@ -9,7 +10,8 @@ export type ProductInCatalogType = {
     image: string
     title: string
     id: string
-    addToCart: (payload: AddToCartType) => void
+    //addToCart: (payload: AddToCartType) => void
+    //updateItem: (idItem: string, count: number) => void
 }
 
 export const ProductInCatalog: FC<ProductInCatalogType> = ({
@@ -18,12 +20,21 @@ export const ProductInCatalog: FC<ProductInCatalogType> = ({
                                                                image,
                                                                title,
                                                                id,
-                                                               addToCart
+                                                               //addToCart,
+                                                               //updateItem
                                                            }) => {
-    const addToCartHandler = () => {
-        addToCart({title: title, image: image, price: price, count: 1, idItem: id})
-    }
+    const itemsCart = useAppSelector(state => state.products.cart.items)
+    const userId = useAppSelector(state => state.auth.id)
+    const dispatch = useAppDispatch()
 
+    const addToCartHandler = () => {
+        let currentItemCart = itemsCart.find((i) => i.idItem === id)
+        if (!!currentItemCart) {
+            dispatch(updateItemCartTC({itemId: id, count: currentItemCart.count + 1, userId: userId}))
+        } else {
+            dispatch(addToCartTC({title: title, image: image, price: price, count: 1, itemId: id, userId}))
+        }
+    }
 
     return <div className={s.container}>
         <img src={image} className={s.image}></img>
