@@ -1,17 +1,15 @@
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {collection, doc, onSnapshot, query, setDoc} from "firebase/firestore";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {collection, deleteField, doc, onSnapshot, query, setDoc, updateDoc} from "firebase/firestore";
 import {db} from "../../firebase";
 import {ProductInCatalogType} from "../../components/ProductInCatalog/ProductInCatalog";
 import {ItemCartType} from "../../pages/Cart/Cart";
-import {useAuth} from "../../hooks/use-auth";
-import {useAppSelector} from "../../hooks/redux-hooks";
-import {useState} from "react";
 
 export const fetchAllProductsTC = createAsyncThunk<any>(
     'product/getAllProduct',
     async (_, {dispatch}) => {
         //dispatch(setAppStatusAC({isLoading: true}))
         try {
+
             const q = query(collection(db, '/products'))
             const unsubscribe = onSnapshot(q, (querySnapshot) => {
                 dispatch(setDataProducts(querySnapshot.docs.map(doc => ({...doc.data(), id: doc.id}))));
@@ -27,23 +25,57 @@ export const fetchAllProductsTC = createAsyncThunk<any>(
     })
 
 export const addToCartTC = createAsyncThunk(
-    'product/addToCart ',
-    async (param: { idItem: string }, {dispatch}) => {
-        debugger
-        //const {id} = useAuth()
-        //console.log(id)
-        const [cart, setCart] = useState([])
-        const id = useAppSelector(state => state.auth.id)
-        console.log(id)
+    'product/addToCart',
+    async (param: { title: string, image: string, price: number, count: number, itemId: string, userId: string | null }, {dispatch}) => {
         //dispatch(setAppStatusAC({isLoading: true}))
-        if (id != null) {
-            const cartRef = doc(db, 'cart', id)
-            debugger
+        if (param.userId != null) {
+            const cartRef = doc(db, 'cart', param.userId)
             try {
                 await setDoc(cartRef,
-                    {cart: cart ? [...cart, {idItem: '12124232121', count: 13}] : []},
+                    {
+                        cart: {
+                            [param.itemId]: {
+                                title: param.title,
+                                image: param.image,
+                                price: param.price,
+                                count: param.count,
+                                idItem: param.itemId
+                            }
+                        }
+                    },
                     {merge: true})
             } catch (e) {
+                console.log("Error ")
+            }
+        }
+    })
+
+
+export const updateItemCartTC = createAsyncThunk(
+    'product/updateItemCart',
+    async (param: { itemId: string, count: number, userId: string | null }, {dispatch}) => {
+        if (param.userId != null) {
+            try {
+                await updateDoc(doc(db, 'cart', param.userId), {
+                        [`cart.${[param.itemId]}.count`]: param.count
+                    }
+                )
+            } catch (e) {
+                console.log("No items in Cart")
+            }
+        }
+    })
+
+export const removeItemCartTC = createAsyncThunk(
+    'product/removeItemCart',
+    async (param: { itemId: string, userId: string | null }, {dispatch}) => {
+        if (param.userId != null) {
+            try {
+                await updateDoc(doc(db, 'cart', param.userId), {
+                    [`cart.${[param.itemId]}`]: deleteField()
+                });
+            } catch (e) {
+                console.log("No items for remove")
             }
         }
     })
@@ -66,7 +98,10 @@ const productSlice = createSlice({
             state.products = action.payload
         },
         setDataCart(state, action) {
-            state.cart.items = action.payload
+            const values = Object.values(action.payload);
+            console.log(values);
+            // @ts-ignore
+            state.cart.items = values
         }
     },
     extraReducers: (builder) => {
