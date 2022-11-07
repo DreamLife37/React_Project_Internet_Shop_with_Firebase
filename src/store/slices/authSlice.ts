@@ -32,4 +32,3 @@ const
 
 export const {setAuthData, removeAuthData} = authSlice.actions
 export const authReducer = authSlice.reducer
-console.log(authReducer)

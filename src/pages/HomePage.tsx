@@ -6,7 +6,7 @@ import {useAppDispatch, useAppSelector} from '../hooks/redux-hooks';
 import {ProductInCatalog,} from '../components/ProductInCatalog/ProductInCatalog';
 import {fetchAllProductsTC} from "../store/slices/productSlice";
 import s from './HomePage.module.css'
-
+import {Preloader} from "../components/preloader/Preloader";
 
 export type AddToCartType = {
     title: string,
@@ -17,23 +17,35 @@ export type AddToCartType = {
 }
 
 export const HomePage = () => {
-    const {isAuth, id} = useAuth()
+    const {isAuth} = useAuth()
     const dispatch = useAppDispatch()
     const products = useAppSelector(state => state.products.products)
-
-    useEffect(() => {
-        dispatch(fetchAllProductsTC())
-    }, [])
+    const isLoading = useAppSelector(state => state.app.isLoading)
 
     const handlerLogout = () => {
         dispatch(removeAuthData())
     }
 
+    useEffect(() => {
+        if (isAuth) {
+            dispatch(fetchAllProductsTC())
+        }
+    }, [])
+
     if (!isAuth) {
         return <Navigate to={"/login"}/>
     }
 
+
+    // if (isLoading) {
+    //     return <div
+    //         style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+    //         <Preloader/>
+    //     </div>
+    // }
+
     return <div>
+        {isLoading && <Preloader/>}
         <h1>Home page</h1>
         <Link to={'/cart'}>Корзина</Link>
         <div>
