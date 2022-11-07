@@ -7,6 +7,7 @@ import React, {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../hooks/redux-hooks";
 import {ItemCart} from "./ItemCart/ItemCart";
 import {Link, Navigate} from "react-router-dom";
+import {setAppStatus} from "../../store/slices/appSlice";
 
 export type ItemCartType = {
     image: string,
@@ -27,18 +28,15 @@ export const Cart = () => {
 
     useEffect(() => {
         if (id != null) {
+            dispatch(setAppStatus({isLoading: true}))
             const cartRef = doc(db, '/cart', id)
             const unsubscribe = onSnapshot(cartRef, (itemCart) => {
                 if (itemCart.exists()) {
-                    console.log(itemCart.data().cart)
-                    //setCart(ItemCart.data().cart)
-                    debugger
                     dispatch(setDataCart(itemCart.data().cart))
+                    dispatch(setAppStatus({isLoading: false}))
                 } else {
                     console.log("No items in Cart")
                 }
-                //dispatch(setDataProducts(querySnapshot.docs.map(doc => ({...doc.data(), id: doc.id}))));
-                // console.log(querySnapshot.docs.map(doc => ({...doc.data(), id: doc.id})));
             });
             return () => {
                 unsubscribe()
@@ -51,28 +49,6 @@ export const Cart = () => {
     for (let i in cart.items) {
         total += cart.items[i].price * cart.items[i].count;
     }
-
-    // useEffect(() => {
-    //     if (id != null) {
-    //         const cartRef = doc(collection(db, '/cart', id))
-    //         const unsubscribe = onSnapshot(cartRef, (ItemCart) => {
-    //             if (ItemCart.exists()) {
-    //                 console.log(ItemCart.data().coins)
-    //                 setCart(ItemCart.data().coins)
-    //             } else {
-    //                 console.log("No items in Cart")
-    //             }
-    //             //dispatch(setDataProducts(querySnapshot.docs.map(doc => ({...doc.data(), id: doc.id}))));
-    //             // console.log(querySnapshot.docs.map(doc => ({...doc.data(), id: doc.id})));
-    //         });
-    //         return () => {
-    //             unsubscribe()
-    //         }
-    //     }
-    // }, [id])
-
-
-    //dispatch(setAppStatusAC({isLoading: false}))
 
     if (!isAuth) {
         return <Navigate to={"/login"}/>
@@ -90,11 +66,9 @@ export const Cart = () => {
                                  count={i.count}
                                  amount={i.price * i.count}
                 />
-
             })}
 
             <div>Сумма {total}
-
 
             </div>
         </div>

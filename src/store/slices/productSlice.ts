@@ -3,21 +3,19 @@ import {collection, deleteField, doc, onSnapshot, query, setDoc, updateDoc} from
 import {db} from "../../firebase";
 import {ProductInCatalogType} from "../../components/ProductInCatalog/ProductInCatalog";
 import {ItemCartType} from "../../pages/Cart/Cart";
+import { setAppStatus } from "./appSlice";
 
 export const fetchAllProductsTC = createAsyncThunk<any>(
     'product/getAllProduct',
     async (_, {dispatch}) => {
-        //dispatch(setAppStatusAC({isLoading: true}))
+        dispatch(setAppStatus({isLoading: true}))
         try {
-
             const q = query(collection(db, '/products'))
-            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            await onSnapshot(q, (querySnapshot) => {
                 dispatch(setDataProducts(querySnapshot.docs.map(doc => ({...doc.data(), id: doc.id}))));
                 console.log(querySnapshot.docs.map(doc => ({...doc.data(), id: doc.id})));
+                dispatch(setAppStatus({isLoading: false}))
             });
-
-            //dispatch(setAppStatusAC({isLoading: false}))
-            return unsubscribe
 
         } catch (e) {
             console.log('getAllProduct', e)
