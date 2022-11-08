@@ -21,6 +21,8 @@ export const HomePage = () => {
     const dispatch = useAppDispatch()
     const products = useAppSelector(state => state.products.products)
     const isLoading = useAppSelector(state => state.app.isLoading)
+    const error = useAppSelector(state => state.app.error)
+    console.log(error)
 
     const handlerLogout = () => {
         dispatch(removeAuthData())
@@ -36,17 +38,10 @@ export const HomePage = () => {
         return <Navigate to={"/login"}/>
     }
 
-
-    // if (isLoading) {
-    //     return <div
-    //         style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
-    //         <Preloader/>
-    //     </div>
-    // }
-
     return <div>
         {isLoading && <Preloader/>}
         <h1>Home page</h1>
+
         <Link to={'/cart'}>Корзина</Link>
         <div>
             <button onClick={handlerLogout}>Log out</button>

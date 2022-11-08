@@ -1,21 +1,14 @@
 import s from './Cart.module.css'
 import {doc, onSnapshot} from "firebase/firestore";
 import {db} from "../../firebase";
-import {setDataCart, setDataProducts} from "../../store/slices/productSlice";
+import {setDataCart} from "../../store/slices/productSlice";
 import {useAuth} from "../../hooks/use-auth";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../hooks/redux-hooks";
 import {ItemCart} from "./ItemCart/ItemCart";
 import {Link, Navigate} from "react-router-dom";
 import {setAppStatus} from "../../store/slices/appSlice";
 
-export type ItemCartType = {
-    image: string,
-    title: string,
-    idItem: string,
-    price: number,
-    count: number,
-}
 
 export const Cart = () => {
 
@@ -24,7 +17,6 @@ export const Cart = () => {
 
     const cart = useAppSelector(state => state.products.cart)
     console.log(cart)
-
 
     useEffect(() => {
         if (id != null) {
@@ -65,6 +57,7 @@ export const Cart = () => {
                                  title={i.title}
                                  count={i.count}
                                  amount={i.price * i.count}
+                                 availability={i.availability}
                 />
             })}
 

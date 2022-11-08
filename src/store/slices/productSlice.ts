@@ -2,8 +2,9 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {collection, deleteField, doc, onSnapshot, query, setDoc, updateDoc} from "firebase/firestore";
 import {db} from "../../firebase";
 import {ProductInCatalogType} from "../../components/ProductInCatalog/ProductInCatalog";
-import {ItemCartType} from "../../pages/Cart/Cart";
-import { setAppStatus } from "./appSlice";
+
+import {setAppStatus} from "./appSlice";
+import { ItemCartType } from "../../pages/Cart/ItemCart/ItemCart";
 
 export const fetchAllProductsTC = createAsyncThunk<any>(
     'product/getAllProduct',
@@ -16,7 +17,6 @@ export const fetchAllProductsTC = createAsyncThunk<any>(
                 console.log(querySnapshot.docs.map(doc => ({...doc.data(), id: doc.id})));
                 dispatch(setAppStatus({isLoading: false}))
             });
-
         } catch (e) {
             console.log('getAllProduct', e)
         }
@@ -24,7 +24,7 @@ export const fetchAllProductsTC = createAsyncThunk<any>(
 
 export const addToCartTC = createAsyncThunk(
     'product/addToCart',
-    async (param: { title: string, image: string, price: number, count: number, itemId: string, userId: string | null }, {dispatch}) => {
+    async (param: { title: string, image: string, price: number, count: number, itemId: string, userId: string | null, availability: number }, {dispatch}) => {
         //dispatch(setAppStatusAC({isLoading: true}))
         if (param.userId != null) {
             const cartRef = doc(db, 'cart', param.userId)
@@ -37,7 +37,8 @@ export const addToCartTC = createAsyncThunk(
                                 image: param.image,
                                 price: param.price,
                                 count: param.count,
-                                idItem: param.itemId
+                                idItem: param.itemId,
+                                availability: param.availability
                             }
                         }
                     },
