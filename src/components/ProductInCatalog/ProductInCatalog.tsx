@@ -32,7 +32,7 @@ export const ProductInCatalog: FC<ProductInCatalogType> = ({
         if (!!currentItemCart) {
             dispatch(updateItemCartTC({itemId: id, count: currentItemCart.count + 1, userId: userId}))
         } else {
-            dispatch(addToCartTC({title: title, image: image, price: price, count: 1, itemId: id, userId}))
+            dispatch(addToCartTC({title: title, image: image, price: price, count: 1, itemId: id, userId, availability: +availability}))
         }
     }
 
