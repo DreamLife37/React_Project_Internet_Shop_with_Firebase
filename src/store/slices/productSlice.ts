@@ -4,7 +4,7 @@ import {db} from "../../firebase";
 import {ProductInCatalogType} from "../../components/ProductInCatalog/ProductInCatalog";
 
 import {setAppStatus} from "./appSlice";
-import { ItemCartType } from "../../pages/Cart/ItemCart/ItemCart";
+import {ItemCartType} from "../../pages/Cart/ItemCart/ItemCart";
 
 export const fetchAllProductsTC = createAsyncThunk<any>(
     'product/getAllProduct',
@@ -49,6 +49,34 @@ export const addToCartTC = createAsyncThunk(
         }
     })
 
+export const fetchDataCartTC = createAsyncThunk(
+    'product/fetchDataCart',
+    async (param: { userId: string | null }, {dispatch,getState}) => {
+        if (param.userId != null) {
+            try {
+                dispatch(setAppStatus({isLoading: true}))
+                const cartRef = doc(db, '/cart', param.userId)
+                const unsubscribe = onSnapshot(cartRef, (itemCart) => {
+                    if (itemCart.exists()) {
+                        dispatch(setDataCart(itemCart.data().cart))
+                        dispatch(setAppStatus({isLoading: false}))
+
+                        // @ts-ignore
+                        const itemsArr = getState().products.cart.items
+                        console.log(itemsArr)
+                        const amount = ( itemsArr.reduce((a: any, v: { price: number; count:number}) =>  a = a + v.price * v.count, 0 ));
+                        dispatch(setAmountCart(amount))
+
+                    } else {
+                        console.log("No items in Cart")
+                    }
+                });
+            } catch (e) {
+                console.log("No items in Cart")
+            }
+        }
+    })
+
 
 export const updateItemCartTC = createAsyncThunk(
     'product/updateItemCart',
@@ -79,12 +107,20 @@ export const removeItemCartTC = createAsyncThunk(
         }
     })
 
-
-const initialState = {
-    products: [] as ProductInCatalogType[],
+type InitialStateType = {
+    products: ProductInCatalogType[],
     cart: {
-        items: [] as ItemCartType[],
-        amount: ''
+        items: ItemCartType[],
+        amount: Number
+    }
+}
+
+
+const initialState: InitialStateType = {
+    products: [],
+    cart: {
+        items: [],
+        amount: 0
     }
 }
 
@@ -101,6 +137,10 @@ const productSlice = createSlice({
             console.log(values);
             // @ts-ignore
             state.cart.items = values
+        },
+        setAmountCart(state, action) {
+
+            state.cart.amount = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -111,5 +151,5 @@ const productSlice = createSlice({
         })
     }
 })
-export const {setDataProducts, setDataCart} = productSlice.actions
+export const {setDataProducts, setDataCart, setAmountCart} = productSlice.actions
 export const productReducer = productSlice.reducer
