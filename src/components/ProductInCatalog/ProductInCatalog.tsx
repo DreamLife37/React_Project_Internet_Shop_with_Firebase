@@ -1,17 +1,15 @@
 import s from './ProductInCatalog.module.css'
-import {FC} from "react";
+import {FC, useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../hooks/redux-hooks";
-import {addToCartTC, updateItemCartTC} from "../../store/slices/productSlice";
-
+import {addToCartTC, setAmountCart, updateItemCartTC} from "../../store/slices/productSlice";
+import {setAppError} from "../../store/slices/appSlice";
 
 export type ProductInCatalogType = {
-    availability: string
+    availability: number
     price: number
     image: string
     title: string
     id: string
-    //addToCart: (payload: AddToCartType) => void
-    //updateItem: (idItem: string, count: number) => void
 }
 
 export const ProductInCatalog: FC<ProductInCatalogType> = ({
@@ -20,8 +18,6 @@ export const ProductInCatalog: FC<ProductInCatalogType> = ({
                                                                image,
                                                                title,
                                                                id,
-                                                               //addToCart,
-                                                               //updateItem
                                                            }) => {
     const itemsCart = useAppSelector(state => state.products.cart.items)
     const userId = useAppSelector(state => state.auth.id)
@@ -29,10 +25,22 @@ export const ProductInCatalog: FC<ProductInCatalogType> = ({
 
     const addToCartHandler = () => {
         let currentItemCart = itemsCart.find((i) => i.idItem === id)
-        if (!!currentItemCart) {
-            dispatch(updateItemCartTC({itemId: id, count: currentItemCart.count + 1, userId: userId}))
+        if (currentItemCart && (currentItemCart.count >= availability)) {
+            dispatch(setAppError({error: `На складе доступно ${availability}`}))
         } else {
-            dispatch(addToCartTC({title: title, image: image, price: price, count: 1, itemId: id, userId, availability: +availability}))
+            if (!!currentItemCart) {
+                dispatch(updateItemCartTC({itemId: id, count: currentItemCart.count + 1, userId: userId}))
+            } else {
+                dispatch(addToCartTC({
+                    title: title,
+                    image: image,
+                    price: price,
+                    count: 1,
+                    itemId: id,
+                    userId,
+                    availability: +availability
+                }))
+            }
         }
     }
 
