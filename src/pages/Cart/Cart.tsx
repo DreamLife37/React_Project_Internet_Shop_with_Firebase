@@ -1,32 +1,38 @@
 import s from './Cart.module.css'
-import {doc, onSnapshot} from "firebase/firestore";
-import {db} from "../../firebase";
-import {fetchDataCartTC, setAmountCart, setDataCart} from "../../store/slices/productSlice";
+import {fetchDataCartTC, fetchDataOrdersTC} from "../../store/slices/productSlice";
 import {useAuth} from "../../hooks/use-auth";
 import React, {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../hooks/redux-hooks";
 import {ItemCart} from "./ItemCart/ItemCart";
 import {Link, Navigate} from "react-router-dom";
-import {setAppStatus} from "../../store/slices/appSlice";
+import {OrderingForm} from "../Orders/OrderingForm/OrderingForm";
 
 export const Cart = () => {
     const {id, isAuth} = useAuth()
     const dispatch = useAppDispatch()
 
     const cart = useAppSelector(state => state.products.cart)
+    console.log(cart.items)
     const amountCart = useAppSelector(state => state.products.cart.amount)
 
     useEffect(() => {
         if (id != null) {
             dispatch(fetchDataCartTC({userId: id}))
+            dispatch(fetchDataOrdersTC())
         }
     }, [])
-
 
 
     if (!isAuth) {
         return <Navigate to={"/login"}/>
     }
+
+    let cartOrder = cart.items.map((i) => {
+        return {name: i.title, price: i.price, count: i.count,
+            //amountCart: i.amount
+        }
+    })
+    console.log(cartOrder)
 
     return <div className={s.container}>
         <div className={s.cart}>
@@ -47,12 +53,6 @@ export const Cart = () => {
 
             </div>
         </div>
-        <div className={s.order}>
-            <input placeholder={'Имя'}/>
-            <input placeholder={'Фамилия'}/>
-            <input placeholder={'Адрес'}/>
-            <input placeholder={'Номер телефона'}/>
-            <button>Оформить</button>
-        </div>
+        <div className={s.order}><OrderingForm cartOrder={cartOrder}/></div>
     </div>
 }
