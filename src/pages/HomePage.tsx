@@ -4,12 +4,9 @@ import {useAuth} from "../hooks/use-auth";
 import {removeAuthData} from "../store/slices/authSlice";
 import {useAppDispatch, useAppSelector} from '../hooks/redux-hooks';
 import {ProductInCatalog,} from '../components/ProductInCatalog/ProductInCatalog';
-import {fetchAllProductsTC, fetchDataCartTC, setAmountCart, setDataCart} from "../store/slices/productSlice";
+import {fetchAllProductsTC, fetchDataCartTC} from "../store/slices/productSlice";
 import s from './HomePage.module.css'
 import {Preloader} from "../components/preloader/Preloader";
-import {setAppStatus} from "../store/slices/appSlice";
-import {doc, onSnapshot} from "firebase/firestore";
-import {db} from "../firebase";
 
 export type AddToCartType = {
     title: string,

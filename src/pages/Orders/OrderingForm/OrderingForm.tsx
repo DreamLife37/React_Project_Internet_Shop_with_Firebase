@@ -1,11 +1,10 @@
-import React from "react";
+import React, {useState} from "react";
 import {useFormik} from "formik";
 import style from './Ordering.module.css'
-import {removeItemCartTC, sendOrderTC} from "../../../store/slices/productSlice";
+import {removeAllItemCartTC, sendOrderTC} from "../../../store/slices/productSlice";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux-hooks";
-import {Navigate} from "react-router-dom";
 import {useAuth} from "../../../hooks/use-auth";
-
+import { useNavigate } from 'react-router-dom';
 
 type FormikErrorType = {
     name?: string
@@ -27,7 +26,9 @@ export const OrderingForm: React.FC<OrderFormType> = ({
                                                       }) => {
     const dispatch = useAppDispatch()
     const amountCart = useAppSelector(state => state.products.cart.amount)
-    const {isAuth, id} = useAuth()
+    const {id} = useAuth()
+
+    let navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {
@@ -60,8 +61,8 @@ export const OrderingForm: React.FC<OrderFormType> = ({
                     cartOrder: cartOrder
                 })).then((res) => {
                     if (res.meta.requestStatus === "fulfilled") {
-                        dispatch(removeItemCartTC({userId: id, itemId: '456456'}))
-                        return <Navigate to={"/successfulOrder"}/>
+                        dispatch(removeAllItemCartTC({userId: id}))
+                        navigate('/successfulOrder');
                     }
                 })
 

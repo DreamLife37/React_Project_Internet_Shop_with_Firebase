@@ -58,7 +58,6 @@ export const fetchDataCartTC = createAsyncThunk(
                 const unsubscribe = onSnapshot(cartRef, (itemCart) => {
                     if (itemCart.exists()) {
                         console.log(itemCart.data().cart)
-                        debugger
                         dispatch(setDataCart(itemCart.data().cart))
                         dispatch(setAppStatus({isLoading: false}))
 
@@ -100,7 +99,20 @@ export const removeItemCartTC = createAsyncThunk(
         if (param.userId != null) {
             try {
                 await updateDoc(doc(db, 'cart', param.userId), {
-                    // [`cart.${[param.itemId]}`]: deleteField()
+                    [`cart.${[param.itemId]}`]: deleteField()
+                });
+            } catch (e) {
+                console.log("No items for remove")
+            }
+        }
+    })
+
+export const removeAllItemCartTC = createAsyncThunk(
+    'product/removeAllItemCart',
+    async (param: { userId: string | null }, {dispatch}) => {
+        if (param.userId != null) {
+            try {
+                await updateDoc(doc(db, 'cart', param.userId), {
                     [`cart`]: deleteField()
                 });
             } catch (e) {
@@ -124,7 +136,6 @@ export const sendOrderTC = createAsyncThunk(
         const userId = getState().auth.id
         // @ts-ignore
         const orders = getState().products.orders
-        console.log(orders)
         if (userId != null) {
             const orderRef = doc(db, 'cart', userId)
             const orderModel = {
@@ -136,7 +147,6 @@ export const sendOrderTC = createAsyncThunk(
                 items: param.cartOrder
             }
             console.log('orders', orders)
-            debugger
             try {
                 await setDoc(orderRef,
                     {
@@ -219,8 +229,7 @@ const productSlice = createSlice({
             state.products = action.payload
         },
         setDataCart(state, action) {
-            debugger
-            if (action.payload===undefined) {
+            if (action.payload === undefined) {
                 state.cart.items = []
             } else {
                 const values = Object.values(action.payload);
