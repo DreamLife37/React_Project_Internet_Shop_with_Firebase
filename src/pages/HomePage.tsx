@@ -26,10 +26,7 @@ export const HomePage = () => {
     const isLoading = useAppSelector(state => state.app.isLoading)
     const error = useAppSelector(state => state.app.error)
     const cart = useAppSelector(state => state.products.cart)
-    const amountCart1 = useAppSelector(state => state.products.cart.amount)
-    console.log(amountCart1)
-
-    console.log(error)
+    const amountCart = useAppSelector(state => state.products.cart.amount)
 
     const handlerLogout = () => {
         dispatch(removeAuthData())
@@ -55,8 +52,13 @@ export const HomePage = () => {
         {isLoading && <Preloader/>}
         <h1>Home page</h1>
         <Link to={'/cart'}>
-            <div>{`Корзина ${amountCart1}`}</div>
+            <div>{`Корзина ${amountCart > 0 ? amountCart : ''}`}</div>
         </Link>
+
+        <Link to={'/myorders'}>
+            <div>{`Мои заказы`}</div>
+        </Link>
+
         <div>
             <button onClick={handlerLogout}>Log out</button>
         </div>
