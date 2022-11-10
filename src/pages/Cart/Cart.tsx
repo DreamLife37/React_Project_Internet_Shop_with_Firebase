@@ -28,30 +28,30 @@ export const Cart = () => {
     }
 
     let cartOrder = cart.items.map((i) => {
-        return {name: i.title, price: i.price, count: i.count,
-            //amountCart: i.amount
+        return {
+            name: i.title, price: i.price, count: i.count,
         }
     })
-    console.log(cartOrder)
 
     return <div className={s.container}>
         <div className={s.cart}>
             <Link to={'/'}>На домашнюю страницу</Link>
-            {cart.items.map((i) => {
-                return <ItemCart key={i.idItem}
-                                 idItem={i.idItem}
-                                 image={i.image}
-                                 price={i.price}
-                                 title={i.title}
-                                 count={i.count}
-                                 amount={i.price * i.count}
-                                 availability={i.availability}
-                />
-            })}
+            {
+                cart.items.length ? cart.items.map((i) => {
+                        return <ItemCart key={i.idItem}
+                                         idItem={i.idItem}
+                                         image={i.image}
+                                         price={i.price}
+                                         title={i.title}
+                                         count={i.count}
+                                         amount={i.price * i.count}
+                                         availability={i.availability}
+                        />
+                    })
+                    : <div>Корзина пуста</div>
+            }
 
-            <div>{`Сумма ${amountCart}`}
-
-            </div>
+            {cart.items.length > 0 && <div>{`Сумма ${amountCart}`}</div>}
         </div>
         <div className={s.order}><OrderingForm cartOrder={cartOrder}/></div>
     </div>
