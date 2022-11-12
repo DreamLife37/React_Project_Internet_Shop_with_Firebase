@@ -47,18 +47,8 @@ export const HomePage = () => {
 
     return <div>
         {isLoading && <Preloader/>}
-        <h1>Home page</h1>
-        <Link to={'/cart'}>
-            <div>{`Корзина ${amountCart > 0 ? amountCart : ''}`}</div>
-        </Link>
+        <h1>Главная</h1>
 
-        <Link to={'/myorders'}>
-            <div>{`Мои заказы`}</div>
-        </Link>
-
-        <div>
-            <button onClick={handlerLogout}>Log out</button>
-        </div>
         <div className={s.container}>{products.map(p => {
             return <ProductInCatalog key={p.id} title={p.title} id={p.id} availability={p.availability} image={p.image}
                                      price={p.price}/>

@@ -1,7 +1,7 @@
 import {createUserWithEmailAndPassword, getAuth} from "firebase/auth";
-import {Form} from "./Form";
+import {Form} from "./formAuth/Form";
 import {setAuthData} from "../store/slices/authSlice";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import React from "react";
 import { useAppDispatch } from "../hooks/redux-hooks";
 
@@ -18,6 +18,11 @@ export const SignUp = () => {
             .catch(console.error)
     }
     return <div>
-        <Form title={'Sign up'} handleClick={handleRegister}/>
+        <Form title={'Регистрация'} handleClick={handleRegister}>{
+            <>
+                <div>Имеется аккаунт?</div>
+                <div><Link to={'/login'}>Войти</Link></div>
+            </>
+        }</Form>
     </div>
 }

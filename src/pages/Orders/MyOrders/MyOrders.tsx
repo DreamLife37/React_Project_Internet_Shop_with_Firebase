@@ -20,19 +20,20 @@ export const MyOrders = () => {
     }
 
     return <div>
-        <Link to={'/'}>На домашнюю страницу</Link>
         <h2>Мои заказы</h2>
-        {orders.map((order, index) =>
-            <div key={index}>
-                <h3>{`Заказ ${index + 1}`}</h3>
-                {order.items.map((i, key) =>
-                    <div key={key}><span>{key + 1}</span>
-                        <span className={s.item}>{i.name}</span>
-                        <span className={s.item}>{i.price} $</span>
-                        <span className={s.item}>{i.count} шт</span>
-                    </div>)
-                }
-                <div>Сумма заказа: {order.amountCart}</div>
-            </div>)}
+        {orders.length
+            ? orders.map((order, index) =>
+                <div key={index}>
+                    <h3>{`Заказ ${index + 1}`}</h3>
+                    {order.items.map((i, key) =>
+                        <div key={key}><span>{key + 1}</span>
+                            <span className={s.item}>{i.name}</span>
+                            <span className={s.item}>{i.price} $</span>
+                            <span className={s.item}>{i.count} шт</span>
+                        </div>)
+                    }
+                    <div>Сумма заказа: {order.amountCart}</div>
+                </div>)
+            : <div>Список заказов пуст</div>}
     </div>
 }

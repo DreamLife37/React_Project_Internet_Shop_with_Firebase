@@ -4,6 +4,9 @@ import {useAuth} from '../../../hooks/use-auth';
 import {FC} from "react";
 import {removeItemCartTC, updateItemCartTC} from "../../../store/slices/productSlice";
 import {setAppError} from "../../../store/slices/appSlice";
+import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
+import IconButton from '@mui/material/IconButton';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 export type ItemCartType = {
     image: string,
@@ -44,9 +47,14 @@ export const ItemCart: FC<ItemCartType> = ({idItem, image, title, count, price, 
         <div>{title}</div>
         <div>{price}</div>
         <div>
-            <button onClick={downCount}>-</button>
+            <IconButton aria-label="minus" onClick={downCount}>
+                <IndeterminateCheckBoxIcon style={{color: "white" }} />
+            </IconButton>
             <span>{count}</span>
-            <button onClick={upCount}>+</button>
+            <IconButton aria-label="plus" onClick={upCount}>
+                <AddBoxIcon style={{color: "white" }} />
+            </IconButton>
+
         </div>
         <div>{amount}</div>
 

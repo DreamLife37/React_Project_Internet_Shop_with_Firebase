@@ -35,9 +35,9 @@ export const Cart = () => {
 
     return <div className={s.container}>
         <div className={s.cart}>
-            <Link to={'/'}>На домашнюю страницу</Link>
             {
-                cart.items.length ? cart.items.map((i) => {
+                cart.items.length
+                    ? cart.items.map((i) => {
                         return <ItemCart key={i.idItem}
                                          idItem={i.idItem}
                                          image={i.image}
@@ -51,7 +51,7 @@ export const Cart = () => {
                     : <div>Корзина пуста</div>
             }
 
-            {cart.items.length > 0 && <div>{`Сумма ${amountCart}`}</div>}
+            {cart.items.length > 0 && <div>{`Сумма ${amountCart} $`}</div>}
         </div>
         <div className={s.order}><OrderingForm cartOrder={cartOrder}/></div>
     </div>

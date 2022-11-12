@@ -241,14 +241,17 @@ const productSlice = createSlice({
             state.cart.amount = action.payload
         },
         setDataOrders(state, action) {
+            if (action.payload !== undefined) {
+                const values = Object.values(action.payload);
+                state.orders = action.payload
+                console.log('values', values);
+            }
             console.log(action.payload)
             //debugger
-            const values = Object.values(action.payload);
-            console.log('values', values);
             // @ts-ignore
             console.log(state.orders)
             // @ts-ignore
-            state.orders = action.payload
+
             console.log(state)
         },
     },

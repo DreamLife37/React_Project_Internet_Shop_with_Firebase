@@ -10,13 +10,16 @@ import {useAppSelector} from "./hooks/redux-hooks";
 import {SnackBar} from "./components/snackbar/SnackBar";
 import {SuccessfulOrder} from "./pages/Orders/SuccessfulOrder/SuccessfulOrder";
 import {MyOrders} from "./pages/Orders/MyOrders/MyOrders";
+import {MenuAppBar} from "./components/appBar/AppBar";
 
 function App() {
     const isLoading = useAppSelector(state => state.app.isLoading)
     return (
         <div className="App">
+            <MenuAppBar/>
             <header className="App-header">
                 {isLoading && <Preloader/>}
+
                 <SnackBar/>
                 <Routes>
                     <Route path={'/login'} element={<LoginPage/>}/>
