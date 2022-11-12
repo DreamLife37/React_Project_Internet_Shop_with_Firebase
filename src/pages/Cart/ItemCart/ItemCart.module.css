@@ -1,24 +1,17 @@
-.container {
-    display: flex;
-}
-
-.cart {
-    flex: 3;
-
-}
-
 .item {
     display: flex;
     justify-content: space-between;
-    padding-right: 20px;
-    padding-left: 20px;
+    padding-right: 10px;
+    padding-left: 10px;
     align-items: center;
+    padding-bottom: 10px;
 }
 
 .image {
     width: 160px;
     height: 100px;
     object-fit: cover;
+    border-radius: 4px;
 }
 
 .order {

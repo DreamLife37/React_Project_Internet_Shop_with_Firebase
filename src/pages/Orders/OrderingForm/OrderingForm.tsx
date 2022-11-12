@@ -1,10 +1,15 @@
 import React, {useState} from "react";
 import {useFormik} from "formik";
-import style from './Ordering.module.css'
+import s from './Ordering.module.css'
 import {removeAllItemCartTC, sendOrderTC} from "../../../store/slices/productSlice";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux-hooks";
 import {useAuth} from "../../../hooks/use-auth";
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import FormControl from "@mui/material/FormControl";
+import Button from "@mui/material/Button";
+import {TextField} from "@mui/material";
 
 type FormikErrorType = {
     name?: string
@@ -86,30 +91,39 @@ export const OrderingForm: React.FC<OrderFormType> = ({
     const disabledButton = (!formik.values.email || !formik.values.name || !formik.values.phone || !!formik.errors.email)
 
     return <div>
-        <form onSubmit={formik.handleSubmit} className={style.form}>
-            <input {...formik.getFieldProps('name')} className={style.input} placeholder={'Имя'}
-            />
-            {formik.touched.name && formik.errors.name
-                ? <div style={{color: '#9d1717', fontSize: '14px'}}>{formik.errors.name}</div>
-                : null}
-            <input
-                {...formik.getFieldProps('email')} className={style.input} placeholder={'Email'}
-            />
-            {formik.touched.email && formik.errors.email
-                ? <div style={{color: '#9d1717', fontSize: '14px'}}>{formik.errors.email}</div>
-                : null}
+        <form onSubmit={formik.handleSubmit} className={s.form}>
 
-            <textarea {...formik.getFieldProps('phone')} placeholder={'Телефон'} name="phone"
-                      className={style.textarea}/>
-            {formik.touched.phone && formik.errors.phone
-                ? <div style={{color: '#ffffff', fontSize: '12px'}}>{formik.errors.phone}</div>
-                : null}
+            <FormControl sx={{m: 1, width: '20ch', height: '70px'}} variant="outlined">
+                <TextField
+                    {...formik.getFieldProps('name')} placeholder={'Имя'}
+                    error={formik.touched.name && Boolean(formik.errors.name)}
+                    helperText={formik.touched.name && formik.errors.name}
+                />
+            </FormControl>
 
-            <button type={'submit'} className={style.button}
-                    disabled={disabledButton}>
-                {'Оформить заказ'}
-            </button>
+
+            <FormControl sx={{m: 1, width: '20ch', height: '70px'}} variant="outlined">
+                <TextField
+                    {...formik.getFieldProps('email')} placeholder={'Email'}
+                    error={formik.touched.email && Boolean(formik.errors.email)}
+                    helperText={formik.touched.email && formik.errors.email}
+
+                />
+            </FormControl>
+
+            <FormControl sx={{m: 1, width: '20ch', height: '70px'}} variant="outlined">
+                <TextField
+                    {...formik.getFieldProps('phone')} placeholder={'Телефон'} name="phone"
+                    error={formik.touched.phone && Boolean(formik.errors.phone)}
+                    helperText={formik.touched.phone && formik.errors.phone}
+                />
+            </FormControl>
+
+            <div className={s.button}>
+                <Button type={'submit'} disabled={disabledButton}
+                        variant="contained">{'Оформить заказ'}</Button>
+            </div>
+
         </form>
-
     </div>
 }
