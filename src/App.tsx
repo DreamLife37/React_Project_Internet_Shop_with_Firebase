@@ -14,13 +14,14 @@ import {MenuAppBar} from "./components/appBar/AppBar";
 
 function App() {
     const isLoading = useAppSelector(state => state.app.isLoading)
+    const error = useAppSelector(state => state.app.error)
+
     return (
         <div className="App">
             <MenuAppBar/>
             <header className="App-header">
                 {isLoading && <Preloader/>}
-
-                <SnackBar/>
+                {error.messageError && <SnackBar/>}
                 <Routes>
                     <Route path={'/login'} element={<LoginPage/>}/>
                     <Route path={'/register'} element={<RegisterPage/>}/>

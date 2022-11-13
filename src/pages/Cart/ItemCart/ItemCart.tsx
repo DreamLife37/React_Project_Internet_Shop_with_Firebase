@@ -33,26 +33,23 @@ export const ItemCart: FC<ItemCartType> = ({idItem, image, title, count, price, 
 
     const upCount = () => {
         if (count >= availability) {
-            console.log(error)
-            dispatch(setAppError({error: `На складе доступно ${availability}`}))
+            dispatch(setAppError({error: {messageError: `На складе доступно ${availability}`, typeError: 'warning'}}))
         } else {
             dispatch(updateItemCartTC({itemId: idItem, count: count + 1, userId: id}))
         }
-
     }
 
     return <div className={s.item}>
-        <img className={s.image}
-             src={image}></img>
+        <img className={s.image} src={image}/>
         <div>{title}</div>
         <div>{price}</div>
         <div>
             <IconButton aria-label="minus" onClick={downCount}>
-                <IndeterminateCheckBoxIcon style={{color: "white" }} />
+                <IndeterminateCheckBoxIcon style={{color: "white"}}/>
             </IconButton>
             <span>{count}</span>
             <IconButton aria-label="plus" onClick={upCount}>
-                <AddBoxIcon style={{color: "white" }} />
+                <AddBoxIcon style={{color: "white"}}/>
             </IconButton>
 
         </div>

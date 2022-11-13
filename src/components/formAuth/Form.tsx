@@ -9,6 +9,8 @@ import Button from '@mui/material/Button';
 import s from './Form.module.css'
 import {TextField} from "@mui/material";
 import {useFormik} from "formik";
+import {useAppDispatch, useAppSelector} from "../../hooks/redux-hooks";
+import {setAppError} from "../../store/slices/appSlice";
 
 type FormType = {
     children: React.ReactNode,
@@ -24,6 +26,9 @@ type FormikErrorType = {
 export const Form: FC<FormType> = ({children, title, handleClick}) => {
 
     const [showPassword, setShowPassword] = useState(false);
+    const dispatch = useAppDispatch()
+    const isLoading = useAppSelector(state => state.app.isLoading)
+    console.log(isLoading)
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword)
@@ -48,21 +53,21 @@ export const Form: FC<FormType> = ({children, title, handleClick}) => {
             }
             if (!values.password) {
                 errors.password = 'Поле обязательно';
+            } else if (values.password.length < 6) {
+                errors.password = 'Минимальный пароль 6 символов';
             }
             return errors;
         },
         onSubmit: async values => {
             if (navigator.onLine) {
-                console.log(values.login)
                 handleClick(values.login, values.password)
             } else {
-                // setSendingStatus('error')
+                dispatch(setAppError({error: {messageError: "Проверьте доступ к интернет", typeError: 'error'}}))
             }
         },
     })
 
-    const disabledButton = (!formik.values.login || !!formik.errors.password)
-
+    const disabledButton = (!formik.values.login || !!formik.errors.password || isLoading)
 
     return <Box className={s.container}>
         <form onSubmit={formik.handleSubmit} className={s.form}>
