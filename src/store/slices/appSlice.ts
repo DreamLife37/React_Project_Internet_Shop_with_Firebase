@@ -2,12 +2,18 @@ import {createSlice} from "@reduxjs/toolkit";
 
 type InitialStateType = {
     isLoading: boolean,
-    error: null | string
+    error: {
+        messageError: null | string,
+        typeError: 'warning' | 'error' | 'info' | 'success'
+    }
 }
 
 const initialState = {
     isLoading: false,
-    error: null
+    error: {
+        messageError: null,
+        typeError: 'warning'
+    }
 } as InitialStateType
 
 const appSlice = createSlice({

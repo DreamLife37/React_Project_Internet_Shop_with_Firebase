@@ -27,7 +27,7 @@ export const ProductInCatalog: FC<ProductInCatalogType> = ({
     const addToCartHandler = () => {
         let currentItemCart = itemsCart.find((i) => i.idItem === id)
         if (currentItemCart && (currentItemCart.count >= availability)) {
-            dispatch(setAppError({error: `На складе доступно ${availability}`}))
+            dispatch(setAppError({error: {messageError: `На складе доступно ${availability}`, typeError: 'warning'}}))
         } else {
             if (!!currentItemCart) {
                 dispatch(updateItemCartTC({itemId: id, count: currentItemCart.count + 1, userId: userId}))
@@ -46,12 +46,12 @@ export const ProductInCatalog: FC<ProductInCatalogType> = ({
     }
 
     return <div className={s.container}>
-        <img src={image} className={s.image}></img>
+        <img src={image} className={s.image}/>
         <div>{title}</div>
         <div>{price} $</div>
-        <div>Наличие {availability}</div>
+        <div className={s.textAvailability}>Наличие {availability}</div>
 
-        <Button className={s.button} variant="contained" onClick={() => {
+        <Button style={{marginTop: '10px', fontSize: '0.7rem'}} variant="contained" onClick={() => {
             addToCartHandler()
         }}>Добавить в корзину</Button>
 

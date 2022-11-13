@@ -1,7 +1,5 @@
 import React, {useState, FC} from "react"
 import FormControl from '@mui/material/FormControl';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -11,18 +9,13 @@ import Button from '@mui/material/Button';
 import s from './Form.module.css'
 import {TextField} from "@mui/material";
 import {useFormik} from "formik";
-import {removeAllItemCartTC, sendOrderTC} from "../../store/slices/productSlice";
+import {useAppDispatch, useAppSelector} from "../../hooks/redux-hooks";
+import {setAppError} from "../../store/slices/appSlice";
 
 type FormType = {
     children: React.ReactNode,
     title: string,
     handleClick: (email: string, password: string) => void
-}
-
-interface State {
-    login: string;
-    password: string;
-    showPassword: boolean;
 }
 
 type FormikErrorType = {
@@ -31,45 +24,19 @@ type FormikErrorType = {
 }
 
 export const Form: FC<FormType> = ({children, title, handleClick}) => {
-    // const [error1, setError] = useState<Error>({
-    //     login: '',
-    //     password: '',
-    // });
 
-    const [values, setValues] = useState<State>({
-        login: '',
-        password: '',
-        showPassword: false,
-    });
-
-    // const validate = () => {
-    //     if (values.login.length < 3) {
-    //         setError({...error1, login: 'Не корректный e-mail'})
-    //     }
-    // }
-
-    const handleChange =
-        (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-            setValues({...values, [prop]: event.target.value});
-        };
+    const [showPassword, setShowPassword] = useState(false);
+    const dispatch = useAppDispatch()
+    const isLoading = useAppSelector(state => state.app.isLoading)
+    console.log(isLoading)
 
     const handleClickShowPassword = () => {
-        setValues({
-            ...values,
-            showPassword: !values.showPassword,
-        });
+        setShowPassword(!showPassword)
     };
 
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
     };
-
-    const handleClickButtonSubmit = () => {
-        let email = values.login
-        let password = values.password
-        console.log(email)
-        handleClick(email, password)
-    }
 
     const formik = useFormik({
         initialValues: {
@@ -86,87 +53,66 @@ export const Form: FC<FormType> = ({children, title, handleClick}) => {
             }
             if (!values.password) {
                 errors.password = 'Поле обязательно';
+            } else if (values.password.length < 6) {
+                errors.password = 'Минимальный пароль 6 символов';
             }
             return errors;
         },
         onSubmit: async values => {
             if (navigator.onLine) {
-
-                handleClickButtonSubmit()
-
-                // dispatch(sendOrderTC({
-                //     name: values.name,
-                //     email: values.email,
-                //     phone: values.phone,
-                //     amountCart: amountCart,
-                //     cartOrder: cartOrder
-                // })).then((res) => {
-                //     if (res.meta.requestStatus === "fulfilled") {
-                //         dispatch(removeAllItemCartTC({userId: id}))
-                //         navigate('/successfulOrder');
-                //     }
-                // })
+                handleClick(values.login, values.password)
             } else {
-                // setSendingStatus('error')
+                dispatch(setAppError({error: {messageError: "Проверьте доступ к интернет", typeError: 'error'}}))
             }
         },
     })
 
-    const disabledButton = (!formik.values.login || !!formik.errors.password)
-
+    const disabledButton = (!formik.values.login || !!formik.errors.password || isLoading)
 
     return <Box className={s.container}>
-        <FormControl sx={{m: 1, width: '25ch'}} variant="outlined">
-            <TextField
-                {...formik.getFieldProps('login')} placeholder={'E-mail'}
-                error={formik.touched.login && Boolean(formik.errors.login)}
-                helperText={formik.touched.login && formik.errors.login}
-            />
-            <InputLabel htmlFor="login">E-mail</InputLabel>
-            {/*<OutlinedInput*/}
-            {/*    id="login"*/}
-            {/*    type={'text'}*/}
-            {/*    value={values.login}*/}
-            {/*    onChange={handleChange('login')}*/}
-            {/*    label="E-mail"*/}
-            {/*    className={s.inputForm}*/}
-            {/*    //onBlur={() => validate()}*/}
-            {/*/>*/}
-        </FormControl>
+        <form onSubmit={formik.handleSubmit} className={s.form}>
 
-        <FormControl sx={{m: 1, width: '25ch'}} variant="outlined">
-            <TextField
-                {...formik.getFieldProps('password')} placeholder={'Пароль'}
-                error={formik.touched.password && Boolean(formik.errors.password)}
-                helperText={formik.touched.password && formik.errors.password}
-            />
-            <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
-            <OutlinedInput
-                error
-                id="outlined-adornment-password"
-                type={values.showPassword ? 'text' : 'password'}
-                value={values.password}
-                onChange={handleChange('password')}
-                endAdornment={
-                    <InputAdornment position="end">
-                        <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                        >
-                            {values.showPassword ? <VisibilityOff/> : <Visibility/>}
-                        </IconButton>
-                    </InputAdornment>
-                }
-                label="Пароль"
-            />
-        </FormControl>
+            <FormControl sx={{m: 1, width: '25ch', height: '70px'}} variant="outlined">
+                <TextField
+                    {...formik.getFieldProps('login')} placeholder={'E-mail'}
+                    error={formik.touched.login && Boolean(formik.errors.login)}
+                    helperText={formik.touched.login && formik.errors.login}
+                />
+            </FormControl>
 
-        <Button className={s.button} variant="contained" onClick={handleClickButtonSubmit}>{title}</Button>
+            <FormControl sx={{m: 1, width: '25ch', height: '70px'}} variant="outlined">
+                <TextField
+                    {...formik.getFieldProps('password')} placeholder={'Пароль'}
+                    type={showPassword ? 'text' : 'password'}
+                    error={formik.touched.password && Boolean(formik.errors.password)}
+                    helperText={formik.touched.password && formik.errors.password}
+                    InputProps={
+                        {
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <VisibilityOff/> : <Visibility/>}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }
+                    }
+                />
+            </FormControl>
 
-        <div className={s.text}>
-            {children}
-        </div>
+            <div className={s.button}>
+                <Button disabled={disabledButton} variant="contained"
+                        type={'submit'}>{title}</Button>
+            </div>
+
+            <div className={s.text}>
+                {children}
+            </div>
+        </form>
     </Box>
 }
