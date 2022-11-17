@@ -56,7 +56,7 @@ export function MenuAppBar() {
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                         <div style={{cursor: "pointer"}} onClick={() => {
                             navigate('/')
-                        }}>Интернет магазин
+                        }}>Интернет магазин by DevAndreyIT
                         </div>
                     </Typography>
                     {isAuth && <Link to={'/cart'} style={{display: "flex", textDecoration: "none"}}>

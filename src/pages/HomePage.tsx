@@ -7,6 +7,7 @@ import {ProductInCatalog,} from '../components/ProductInCatalog/ProductInCatalog
 import {fetchAllProductsTC, fetchDataCartTC} from "../store/slices/productSlice";
 import s from './HomePage.module.css'
 import {Preloader} from "../components/preloader/Preloader";
+import {initializeApp} from '../store/slices/appSlice';
 
 export type AddToCartType = {
     title: string,
@@ -24,20 +25,24 @@ export const HomePage = () => {
     const error = useAppSelector(state => state.app.error)
     const cart = useAppSelector(state => state.products.cart)
     const amountCart = useAppSelector(state => state.products.cart.amount)
+    const isInitialized = useAppSelector(state => state.app.isInitialized)
+    console.log(isInitialized)
 
     const handlerLogout = () => {
         dispatch(removeAuthData())
     }
 
     useEffect(() => {
-        if (isAuth) {
-            dispatch(fetchAllProductsTC())
-        }
-    }, [])
-
-    useEffect(() => {
-        if (id != null) {
+        if (id != null || isAuth) {
             dispatch(fetchDataCartTC({userId: id}))
+            dispatch(fetchAllProductsTC())
+                .then((res)=>{
+                    if (res.meta.requestStatus === "fulfilled") {
+                        console.log(res)
+                        dispatch(initializeApp())
+                    }
+                })
+            // dispatch(initializeApp())
         }
     }, [])
 
@@ -46,7 +51,7 @@ export const HomePage = () => {
     }
 
     return <div>
-        {isLoading && <Preloader/>}
+        {isAuth ? (!isInitialized ? <Preloader/> : '') : ''}
         <h1>Главная</h1>
 
         <div className={s.container}>{products.map(p => {

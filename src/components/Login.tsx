@@ -19,20 +19,25 @@ export const Login = () => {
     const navigation = useNavigate()
 
     const handleLogin = (email: string, password: string) => {
+        dispatch(setAppStatus({status: "loading"}))
         const auth = getAuth();
-        dispatch(setAppStatus(true))
 
         signInWithEmailAndPassword(auth, email, password)
             .then(({user}) => {
                 dispatch(setAuthData({email: user.email, token: user.refreshToken, id: user.uid}))
+                dispatch(setAppStatus({status: "succeeded"}))
                 return navigation("/")
             })
             .catch((err: firebase.FirebaseError) => {
+                dispatch(setAppStatus({status: "failed"}))
                 if (err.code === 'auth/user-not-found') {
                     dispatch(setAppError({error: {messageError: `Не верный логин или пароль`, typeError: 'error'}}))
                 } else {
                     dispatch(setAppError({error: {messageError: `Ошибка`, typeError: 'error'}}))
                 }
+            })
+            .finally(()=>{
+                dispatch(setAppStatus({status: "idle"}))
             })
     }
 

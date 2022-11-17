@@ -2,7 +2,7 @@ import {SignUp} from "../components/SignUp"
 
 export const RegisterPage = () => {
     return <div>
-        <h1>Регистрация</h1>
+        <div style={{fontSize: '36px', paddingBottom: '36px'}}>Регистрация</div>
         <SignUp/>
     </div>
 }
