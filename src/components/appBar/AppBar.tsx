@@ -12,7 +12,7 @@ import {useAuth} from "../../hooks/use-auth";
 import {Link, useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../hooks/redux-hooks";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import {removeAuthData} from "../../store/slices/authSlice";
+import {logoutTC} from "../../store/slices/authSlice";
 
 
 export function MenuAppBar() {
@@ -36,7 +36,7 @@ export function MenuAppBar() {
     };
 
     const handleLogout = () => {
-        dispatch(removeAuthData())
+        dispatch(logoutTC())
         setAnchorEl(null);
     }
 
@@ -65,7 +65,7 @@ export function MenuAppBar() {
                             color: "white",
                             textDecoration: "none",
                             paddingRight: '15px'
-                        }}>{`${amountCart > 0 ? (`${amountCart}$`): ''}`}</span>
+                        }}>{`${amountCart > 0 ? (`${amountCart}$`) : ''}`}</span>
                     </Link>}
                     {isAuth && (
                         <div>

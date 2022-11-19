@@ -266,7 +266,6 @@ const productSlice = createSlice({
             if (action.payload !== undefined) {
                 const values = Object.values(action.payload);
                 state.orders = action.payload
-                console.log('values', values);
             }
         },
     },
