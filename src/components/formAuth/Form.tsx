@@ -28,8 +28,6 @@ export const Form: FC<FormType> = ({children, title, handleClick}) => {
 
     const [showPassword, setShowPassword] = useState(false);
     const dispatch = useAppDispatch()
-    const isLoading = useAppSelector(state => state.app.isLoading)
-    console.log(isLoading)
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword)

@@ -34,15 +34,14 @@ export const HomePage = () => {
 
     useEffect(() => {
         if (id != null || isAuth) {
-            dispatch(fetchDataCartTC({userId: id}))
             dispatch(fetchAllProductsTC())
-                .then((res)=>{
-                    if (res.meta.requestStatus === "fulfilled") {
-                        console.log(res)
-                        dispatch(initializeApp())
-                    }
-                })
-            // dispatch(initializeApp())
+            dispatch(fetchDataCartTC({userId: id}))
+                // .then((res)=>{
+                //     if (res.meta.requestStatus === "fulfilled") {
+                //         console.log(res)
+                //         // dispatch(initializeApp())
+                //     }
+                // })
         }
     }, [])
 

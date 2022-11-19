@@ -2,35 +2,28 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {collection, deleteField, doc, onSnapshot, query, setDoc, Timestamp, updateDoc} from "firebase/firestore";
 import {db} from "../../firebase";
 import {ProductInCatalogType} from "../../components/ProductInCatalog/ProductInCatalog";
-import {initializeApp, setAppStatus} from "./appSlice";
+import {initializeApp, setAppError, setAppStatus} from "./appSlice";
 import {ItemCartType} from "../../pages/Cart/ItemCart/ItemCart";
+import {handleServerNetworkError} from "../../utils/errorUtitls";
 
 export const fetchAllProductsTC = createAsyncThunk<any>(
     'product/getAllProduct',
     async (_, {dispatch}) => {
         dispatch(setAppStatus({status: "loading"}))
         try {
-            debugger
             const q = query(collection(db, '/products'))
-            await onSnapshot(q, (querySnapshot) => {
-                console.log(querySnapshot)
+            onSnapshot(q, (querySnapshot) => {
                 dispatch(setDataProducts(querySnapshot.docs.map(doc => ({...doc.data(), id: doc.id}))));
-                console.log(querySnapshot.docs.map(doc => ({...doc.data(), id: doc.id})));
-                if (querySnapshot.docs.map(doc => ({...doc.data(), id: doc.id}))) {
+                if (querySnapshot.docs.map(doc => ({...doc.data(), id: doc.id})).length > 0) {
                     dispatch(initializeApp())
                     dispatch(setAppStatus({status: "succeeded"}))
                 } else {
-                    dispatch(setAppStatus({status: "failed"}))
-
+                    handleServerNetworkError(dispatch)
                 }
-
             });
-            console.log('3')
-
         } catch (e) {
-            debugger
             dispatch(setAppStatus({status: "failed"}))
-            console.log('getAllProduct', e)
+            console.log('Error in fetchAllProducts', e)
         }
     })
 
@@ -58,7 +51,7 @@ export const addToCartTC = createAsyncThunk(
                 dispatch(setAppStatus({status: "succeeded"}))
             } catch (e) {
                 dispatch(setAppStatus({status: "failed"}))
-                console.log("Error ")
+                console.log("Error")
             }
         }
     })
@@ -67,32 +60,27 @@ export const fetchDataCartTC = createAsyncThunk(
     'product/fetchDataCart',
     async (param: { userId: string | null }, {dispatch, getState}) => {
         if (param.userId != null) {
+            dispatch(setAppStatus({status: "loading"}))
             try {
-                // dispatch(setAppStatus({status: "loading"}))
                 const cartRef = doc(db, '/cart', param.userId)
-                const unsubscribe = onSnapshot(cartRef, (itemCart) => {
+                onSnapshot(cartRef, (itemCart) => {
                     if (itemCart.exists()) {
-                        console.log(itemCart.data().cart)
                         dispatch(setDataCart(itemCart.data().cart))
-                        // dispatch(setAppStatus({status: "succeeded"}))
 
                         // @ts-ignore
                         const itemsArr = getState().products.cart.items
-                        console.log(itemsArr)
                         const amount = (itemsArr.reduce((a: any, v: { price: number; count: number }) => a = a + v.price * v.count, 0));
                         dispatch(setAmountCart(amount))
-
+                        dispatch(setAppStatus({status: "succeeded"}))
                     } else {
-                        console.log("No items in Cart")
+                        throw new Error("New error")
                     }
                 });
             } catch (e) {
-                dispatch(setAppStatus({status: "failed"}))
-                console.log("No items in Cart")
+                handleServerNetworkError(dispatch)
             }
         }
     })
-
 
 export const updateItemCartTC = createAsyncThunk(
     'product/updateItemCart',
@@ -100,15 +88,17 @@ export const updateItemCartTC = createAsyncThunk(
         dispatch(setAppStatus({status: "loading"}))
         if (param.userId != null) {
             try {
-                await updateDoc(doc(db, 'cart', param.userId), {
-                        [`cart.${[param.itemId]}.count`]: param.count
-                    }
-                )
-                dispatch(setAppStatus({status: "succeeded"}))
-
+                if (navigator.onLine) {
+                    await updateDoc(doc(db, 'cart', param.userId), {
+                            [`cart.${[param.itemId]}.count`]: param.count
+                        }
+                    )
+                    dispatch(setAppStatus({status: "succeeded"}))
+                } else {
+                    throw new Error("No Internet")
+                }
             } catch (e) {
-                dispatch(setAppStatus({status: "failed"}))
-                console.log("No items in Cart")
+                handleServerNetworkError(dispatch)
             }
         }
     })
@@ -120,15 +110,16 @@ export const removeItemCartTC = createAsyncThunk(
 
         if (param.userId != null) {
             try {
-                await updateDoc(doc(db, 'cart', param.userId), {
-                    [`cart.${[param.itemId]}`]: deleteField()
-                });
-                dispatch(setAppStatus({status: "succeeded"}))
-
+                if (navigator.onLine) {
+                    await updateDoc(doc(db, 'cart', param.userId), {
+                        [`cart.${[param.itemId]}`]: deleteField()
+                    });
+                    dispatch(setAppStatus({status: "succeeded"}))
+                } else {
+                    throw new Error("No Internet")
+                }
             } catch (e) {
-                dispatch(setAppStatus({status: "failed"}))
-
-                console.log("No items for remove")
+                handleServerNetworkError(dispatch)
             }
         }
     })
@@ -137,17 +128,18 @@ export const removeAllItemCartTC = createAsyncThunk(
     'product/removeAllItemCart',
     async (param: { userId: string | null }, {dispatch}) => {
         dispatch(setAppStatus({status: "loading"}))
-
         if (param.userId != null) {
             try {
-                await updateDoc(doc(db, 'cart', param.userId), {
-                    [`cart`]: deleteField()
-                });
-                dispatch(setAppStatus({status: "succeeded"}))
-
+                if (navigator.onLine) {
+                    await updateDoc(doc(db, 'cart', param.userId), {
+                        [`cart`]: deleteField()
+                    });
+                    dispatch(setAppStatus({status: "succeeded"}))
+                } else {
+                    throw new Error("No Internet")
+                }
             } catch (e) {
-                dispatch(setAppStatus({status: "failed"}))
-                console.log("No items for remove")
+                handleServerNetworkError(dispatch)
             }
         }
     })
@@ -187,8 +179,7 @@ export const sendOrderTC = createAsyncThunk(
                     {merge: true})
                 dispatch(setAppStatus({status: "succeeded"}))
             } catch (e) {
-                dispatch(setAppStatus({status: "failed"}))
-                console.log("Error ")
+                handleServerNetworkError(dispatch)
             }
         }
     })
@@ -279,13 +270,6 @@ const productSlice = createSlice({
                 state.orders = action.payload
                 console.log('values', values);
             }
-            console.log(action.payload)
-            //debugger
-            // @ts-ignore
-            console.log(state.orders)
-            // @ts-ignore
-
-            console.log(state)
         },
     },
     extraReducers: (builder) => {

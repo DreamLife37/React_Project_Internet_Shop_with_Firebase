@@ -1,4 +1,4 @@
-import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+import { getFirestore} from "firebase/firestore";
 import {initializeApp} from "firebase/app";
 import {getAnalytics} from "firebase/analytics";
 
@@ -15,10 +15,4 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-
 export const db = getFirestore(app);
-
-// const firestoreDB = initializeFirestore(firebaseApp, {
-//     experimentalForceLongPolling: true, // this line
-//     useFetchStreams: false, // and this line
-// })
