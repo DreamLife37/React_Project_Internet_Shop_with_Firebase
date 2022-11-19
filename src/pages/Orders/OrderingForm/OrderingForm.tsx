@@ -1,15 +1,16 @@
-import React, {useState} from "react";
+import React from "react";
 import {useFormik} from "formik";
 import s from './Ordering.module.css'
 import {removeAllItemCartTC, sendOrderTC} from "../../../store/slices/productSlice";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux-hooks";
 import {useAuth} from "../../../hooks/use-auth";
 import {useNavigate} from 'react-router-dom';
-import InputLabel from "@mui/material/InputLabel";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
-import {TextField} from "@mui/material";
+import {CircularProgress, TextField} from "@mui/material";
+import {setAppError, setAppStatus} from "../../../store/slices/appSlice";
+import Box from "@mui/material/Box";
+import {ButtonWithLoading} from "../../../components/ButtonWithLoading/ButtonWithLoading";
 
 type FormikErrorType = {
     name?: string
@@ -22,7 +23,6 @@ type OrderFormType = {
         name: string
         price: number
         count: number
-        //amountCart: number
     }>
 }
 
@@ -31,6 +31,9 @@ export const OrderingForm: React.FC<OrderFormType> = ({
                                                       }) => {
     const dispatch = useAppDispatch()
     const amountCart = useAppSelector(state => state.products.cart.amount)
+    const isLoading = useAppSelector(state => state.app.isLoading)
+    const appStatus = useAppSelector(state => state.app.status)
+
     const {id} = useAuth()
 
     let navigate = useNavigate();
@@ -58,39 +61,56 @@ export const OrderingForm: React.FC<OrderFormType> = ({
         },
         onSubmit: async values => {
             if (navigator.onLine) {
-                dispatch(sendOrderTC({
-                    name: values.name,
-                    email: values.email,
-                    phone: values.phone,
-                    amountCart: amountCart,
-                    cartOrder: cartOrder
-                })).then((res) => {
-                    if (res.meta.requestStatus === "fulfilled") {
-                        dispatch(removeAllItemCartTC({userId: id}))
-                        navigate('/successfulOrder');
-                    }
-                })
-
-                // setSendingStatus('loading')
-                // API.sendMessage(values)
-                //     .then((res) => {
-                //         if (res.statusText === 'OK') {
-                //             formik.resetForm()
-                //             setSendingStatus('success')
-                //         } else setSendingStatus('error')
-                //     })
-                //     .catch((err) => {
-                //         setSendingStatus('error')
-                //     })
+                //dispatch(setAppStatus({status: "loading"}))
+                if (cartOrder.length > 0) {
+                    dispatch(sendOrderTC({
+                        name: values.name,
+                        email: values.email,
+                        phone: values.phone,
+                        amountCart: amountCart,
+                        cartOrder: cartOrder
+                    }))
+                        .then((res) => {
+                            if (res.meta.requestStatus === "fulfilled") {
+                                // dispatch(setAppStatus({status: "succeeded"}))
+                                dispatch(removeAllItemCartTC({userId: id}))
+                                navigate('/successfulOrder');
+                            } else {
+                                dispatch(setAppError({
+                                    error: {
+                                        messageError: `Заказ не оформлен, повторите попытку`,
+                                        typeError: 'error'
+                                    }
+                                }))
+                            }
+                        })
+                        .catch(() => {
+                            dispatch(setAppStatus({status: "failed"}))
+                            dispatch(setAppError({
+                                error: {
+                                    messageError: `Заказ не оформлен, повторите попытку`,
+                                    typeError: 'error'
+                                }
+                            }))
+                        })
+                } else {
+                    dispatch(setAppError({
+                        error: {
+                            messageError: `Невозможно оформить заказ с пустой корзиной`,
+                            typeError: 'warning'
+                        }
+                    }))
+                }
             } else {
-                // setSendingStatus('error')
+                dispatch(setAppError({error: {messageError: "Проверьте доступ к интернет", typeError: 'error'}}))
             }
         },
     })
 
     const disabledButton = (!formik.values.email || !formik.values.name || !formik.values.phone || !!formik.errors.email)
 
-    return <div>
+
+    return <Box className={s.container}>
         <form onSubmit={formik.handleSubmit} className={s.form}>
 
             <FormControl sx={{m: 1, width: '20ch', height: '70px'}} variant="outlined">
@@ -100,7 +120,6 @@ export const OrderingForm: React.FC<OrderFormType> = ({
                     helperText={formik.touched.name && formik.errors.name}
                 />
             </FormControl>
-
 
             <FormControl sx={{m: 1, width: '20ch', height: '70px'}} variant="outlined">
                 <TextField
@@ -120,10 +139,9 @@ export const OrderingForm: React.FC<OrderFormType> = ({
             </FormControl>
 
             <div className={s.button}>
-                <Button type={'submit'} disabled={disabledButton}
-                        variant="contained">{'Оформить заказ'}</Button>
+                <ButtonWithLoading title={'Оформить заказ'} disabledButton={disabledButton}/>
             </div>
 
         </form>
-    </div>
+    </Box>
 }

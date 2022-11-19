@@ -11,6 +11,7 @@ import {TextField} from "@mui/material";
 import {useFormik} from "formik";
 import {useAppDispatch, useAppSelector} from "../../hooks/redux-hooks";
 import {setAppError} from "../../store/slices/appSlice";
+import {ButtonWithLoading} from "../ButtonWithLoading/ButtonWithLoading";
 
 type FormType = {
     children: React.ReactNode,
@@ -27,8 +28,6 @@ export const Form: FC<FormType> = ({children, title, handleClick}) => {
 
     const [showPassword, setShowPassword] = useState(false);
     const dispatch = useAppDispatch()
-    const isLoading = useAppSelector(state => state.app.isLoading)
-    console.log(isLoading)
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword)
@@ -67,7 +66,7 @@ export const Form: FC<FormType> = ({children, title, handleClick}) => {
         },
     })
 
-    const disabledButton = (!formik.values.login || !!formik.errors.password || isLoading)
+    const disabledButton = (!formik.values.login || !!formik.errors.password )
 
     return <Box className={s.container}>
         <form onSubmit={formik.handleSubmit} className={s.form}>
@@ -106,8 +105,7 @@ export const Form: FC<FormType> = ({children, title, handleClick}) => {
             </FormControl>
 
             <div className={s.button}>
-                <Button disabled={disabledButton} variant="contained"
-                        type={'submit'}>{title}</Button>
+                <ButtonWithLoading title={title} disabledButton={disabledButton}/>
             </div>
 
             <div className={s.text}>

@@ -12,8 +12,10 @@
     height: 100px;
     object-fit: cover;
     border-radius: 4px;
+    margin-right: 20px;
 }
 
-.order {
-    flex: 1;
+.text {
+    padding-right: 26px;
 }
+

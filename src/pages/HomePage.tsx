@@ -24,20 +24,23 @@ export const HomePage = () => {
     const error = useAppSelector(state => state.app.error)
     const cart = useAppSelector(state => state.products.cart)
     const amountCart = useAppSelector(state => state.products.cart.amount)
+    const isInitialized = useAppSelector(state => state.app.isInitialized)
+
 
     const handlerLogout = () => {
         dispatch(removeAuthData())
     }
 
     useEffect(() => {
-        if (isAuth) {
+        if (id != null || isAuth) {
             dispatch(fetchAllProductsTC())
-        }
-    }, [])
-
-    useEffect(() => {
-        if (id != null) {
             dispatch(fetchDataCartTC({userId: id}))
+                // .then((res)=>{
+                //     if (res.meta.requestStatus === "fulfilled") {
+                //         console.log(res)
+                //         // dispatch(initializeApp())
+                //     }
+                // })
         }
     }, [])
 
@@ -46,7 +49,7 @@ export const HomePage = () => {
     }
 
     return <div>
-        {isLoading && <Preloader/>}
+        {isAuth ? (!isInitialized ? <Preloader/> : '') : ''}
         <h1>Главная</h1>
 
         <div className={s.container}>{products.map(p => {

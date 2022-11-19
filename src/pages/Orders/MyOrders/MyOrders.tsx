@@ -19,20 +19,21 @@ export const MyOrders = () => {
         return <Navigate to={"/login"}/>
     }
 
-    return <div>
+    return <div className={s.container}>
         <h2>Мои заказы</h2>
         {orders.length
             ? orders.map((order, index) =>
-                <div key={index}>
+                <div key={index} >
                     <h3>{`Заказ ${index + 1}`}</h3>
-                    {order.items.map((i, key) =>
-                        <div key={key}><span>{key + 1}</span>
-                            <span className={s.item}>{i.name}</span>
-                            <span className={s.item}>{i.price} $</span>
-                            <span className={s.item}>{i.count} шт</span>
+                    <div className={s.items}>{order.items.map((i, key) =>
+                        <div key={key} >
+                            <span className={s.text}>{key + 1}</span>
+                            <span className={s.text}>{i.name}</span>
+                            <span className={s.text}>{i.price} $</span>
+                            <span className={s.text}>{i.count} шт</span>
                         </div>)
-                    }
-                    <div>Сумма заказа: {order.amountCart}</div>
+                    }</div>
+                    <div>Сумма заказа: {order.amountCart} $</div>
                 </div>)
             : <div>Список заказов пуст</div>}
     </div>

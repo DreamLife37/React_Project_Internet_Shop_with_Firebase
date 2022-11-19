@@ -41,19 +41,19 @@ export const ItemCart: FC<ItemCartType> = ({idItem, image, title, count, price, 
 
     return <div className={s.item}>
         <img className={s.image} src={image}/>
-        <div>{title}</div>
-        <div>{price}</div>
+        <div className={s.text}>{title}</div>
+        <div className={s.text}>{price} $</div>
         <div>
             <IconButton aria-label="minus" onClick={downCount}>
                 <IndeterminateCheckBoxIcon style={{color: "white"}}/>
             </IconButton>
             <span>{count}</span>
-            <IconButton aria-label="plus" onClick={upCount}>
+            <IconButton aria-label="plus" onClick={upCount} className={s.text}>
                 <AddBoxIcon style={{color: "white"}}/>
             </IconButton>
 
         </div>
-        <div>{amount}</div>
+        <div className={s.text}>{amount} $</div>
 
     </div>
 

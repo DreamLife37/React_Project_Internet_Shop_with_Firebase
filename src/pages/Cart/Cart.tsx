@@ -6,18 +6,23 @@ import {useAppDispatch, useAppSelector} from "../../hooks/redux-hooks";
 import {ItemCart} from "./ItemCart/ItemCart";
 import {Link, Navigate} from "react-router-dom";
 import {OrderingForm} from "../Orders/OrderingForm/OrderingForm";
+import Box from "@mui/material/Box";
+import {CircularProgress, LinearProgress} from "@mui/material";
 
 export const Cart = () => {
     const {id, isAuth} = useAuth()
     const dispatch = useAppDispatch()
 
     const cart = useAppSelector(state => state.products.cart)
+    const appStatus = useAppSelector(state => state.app.status)
+
     console.log(cart.items)
     const amountCart = useAppSelector(state => state.products.cart.amount)
 
     useEffect(() => {
         if (id != null) {
             dispatch(fetchDataCartTC({userId: id}))
+            debugger
             dispatch(fetchDataOrdersTC())
         }
     }, [])
@@ -34,6 +39,9 @@ export const Cart = () => {
     })
 
     return <div className={s.container}>
+        {appStatus == 'loading' && <Box sx={{display: 'flex'}}>
+            <LinearProgress />
+        </Box>}
         <div className={s.cart}>
             {
                 cart.items.length
@@ -51,7 +59,9 @@ export const Cart = () => {
                     : <div>Корзина пуста</div>
             }
 
-            {cart.items.length > 0 && <div>{`Сумма ${amountCart} $`}</div>}
+            {cart.items.length > 0 && <div>Сумма:
+                <span className={s.amountCart}>{`${amountCart} $`}</span>
+            </div>}
         </div>
         <div className={s.order}><OrderingForm cartOrder={cartOrder}/></div>
     </div>
