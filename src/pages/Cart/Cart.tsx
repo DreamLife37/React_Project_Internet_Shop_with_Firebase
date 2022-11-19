@@ -22,6 +22,7 @@ export const Cart = () => {
     useEffect(() => {
         if (id != null) {
             dispatch(fetchDataCartTC({userId: id}))
+            debugger
             dispatch(fetchDataOrdersTC())
         }
     }, [])

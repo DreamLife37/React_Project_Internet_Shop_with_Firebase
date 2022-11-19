@@ -5,6 +5,7 @@ import {ProductInCatalogType} from "../../components/ProductInCatalog/ProductInC
 import {initializeApp, setAppError, setAppStatus} from "./appSlice";
 import {ItemCartType} from "../../pages/Cart/ItemCart/ItemCart";
 import {handleServerNetworkError} from "../../utils/errorUtitls";
+import {AppRootStateType} from "../store";
 
 export const fetchAllProductsTC = createAsyncThunk<any>(
     'product/getAllProduct',
@@ -19,6 +20,7 @@ export const fetchAllProductsTC = createAsyncThunk<any>(
                     dispatch(setAppStatus({status: "succeeded"}))
                 } else {
                     handleServerNetworkError(dispatch)
+                    throw new Error("New error")
                 }
             });
         } catch (e) {
@@ -58,7 +60,7 @@ export const addToCartTC = createAsyncThunk(
 
 export const fetchDataCartTC = createAsyncThunk(
     'product/fetchDataCart',
-    async (param: { userId: string | null }, {dispatch, getState}) => {
+    async (param: { userId: string | null }, {dispatch, getState, rejectWithValue}) => {
         if (param.userId != null) {
             dispatch(setAppStatus({status: "loading"}))
             try {
@@ -66,9 +68,8 @@ export const fetchDataCartTC = createAsyncThunk(
                 onSnapshot(cartRef, (itemCart) => {
                     if (itemCart.exists()) {
                         dispatch(setDataCart(itemCart.data().cart))
-
-                        // @ts-ignore
-                        const itemsArr = getState().products.cart.items
+                        const state = getState() as AppRootStateType
+                        const itemsArr = state.products.cart.items
                         const amount = (itemsArr.reduce((a: any, v: { price: number; count: number }) => a = a + v.price * v.count, 0));
                         dispatch(setAmountCart(amount))
                         dispatch(setAppStatus({status: "succeeded"}))
@@ -84,7 +85,7 @@ export const fetchDataCartTC = createAsyncThunk(
 
 export const updateItemCartTC = createAsyncThunk(
     'product/updateItemCart',
-    async (param: { itemId: string, count: number, userId: string | null }, {dispatch}) => {
+    async (param: { itemId: string, count: number, userId: string | null }, {dispatch, rejectWithValue}) => {
         dispatch(setAppStatus({status: "loading"}))
         if (param.userId != null) {
             try {
@@ -156,10 +157,9 @@ export const sendOrderTC = createAsyncThunk(
     }, {dispatch, getState}) => {
 
         dispatch(setAppStatus({status: "loading"}))
-        // @ts-ignore
-        const userId = getState().auth.id
-        // @ts-ignore
-        const orders = getState().products.orders
+        const state = getState() as AppRootStateType
+        const userId = state.auth.id
+        const orders = state.products.orders
         if (userId != null) {
             const orderRef = doc(db, 'cart', userId)
             const orderModel = {
@@ -188,24 +188,22 @@ export const sendOrderTC = createAsyncThunk(
 export const fetchDataOrdersTC = createAsyncThunk(
     'product/fetchDataOrders',
     async (_, {dispatch, getState}) => {
-        // dispatch(setAppStatus({status: "loading"}))
-        // @ts-ignore
-        const userId = getState().auth.id
+        const state = getState() as AppRootStateType
+        const userId = state.auth.id
         if (userId != null) {
             try {
-                const cartRef = doc(db, '/cart', userId)
-                const unsubscribe = onSnapshot(cartRef, (itemOrder) => {
-                    if (itemOrder.exists()) {
-                        console.log(itemOrder.data().orders)
-                        dispatch(setDataOrders(itemOrder.data().orders))
-                        // dispatch(setAppStatus({status: "succeeded"}))
-                    } else {
-                        console.log("No items in Cart")
-                    }
-                });
+                if (navigator.onLine) {
+                    const cartRef = doc(db, '/cart', userId)
+                    onSnapshot(cartRef, (itemOrder) => {
+                        if (itemOrder.exists()) {
+                            dispatch(setDataOrders(itemOrder.data().orders))
+                        }
+                    })
+                } else {
+                    throw new Error("No Internet")
+                }
             } catch (e) {
-                dispatch(setAppStatus({status: "failed"}))
-                console.log("No items in Cart")
+                handleServerNetworkError(dispatch)
             }
         }
     })

@@ -7,7 +7,6 @@ import {ProductInCatalog,} from '../components/ProductInCatalog/ProductInCatalog
 import {fetchAllProductsTC, fetchDataCartTC} from "../store/slices/productSlice";
 import s from './HomePage.module.css'
 import {Preloader} from "../components/preloader/Preloader";
-import {initializeApp} from '../store/slices/appSlice';
 
 export type AddToCartType = {
     title: string,
@@ -26,7 +25,7 @@ export const HomePage = () => {
     const cart = useAppSelector(state => state.products.cart)
     const amountCart = useAppSelector(state => state.products.cart.amount)
     const isInitialized = useAppSelector(state => state.app.isInitialized)
-    console.log(isInitialized)
+
 
     const handlerLogout = () => {
         dispatch(removeAuthData())
