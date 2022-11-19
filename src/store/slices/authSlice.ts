@@ -1,4 +1,26 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {setAppStatus} from "./appSlice";
+import {getAuth, signOut} from "firebase/auth";
+import {handleServerNetworkError} from "../../utils/errorUtitls";
+
+export const logoutTC = createAsyncThunk<any>(
+    'product/logout',
+    async (_, {dispatch}) => {
+        dispatch(setAppStatus({status: "loading"}))
+        const auth = getAuth();
+        signOut(auth)
+            .then(() => {
+                if (navigator.onLine) {
+                    dispatch(removeAuthData())
+                    dispatch(setAppStatus({status: "succeeded"}))
+                } else {
+                    throw new Error("No Internet")
+                }
+            }).catch((error) => {
+            handleServerNetworkError(dispatch)
+        });
+    })
+
 
 type AuthDataType = {
     email: null | string,
