@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #f6f9fc;
   min-height: calc(100vh - 80px);
   display: flex;
   /*flex-direction: column;*/
@@ -30,7 +30,7 @@
 
 .LinearProgress{
   height: 20px;
-  background-color: #282c34;
+  background-color: #f6f9fc;
 }
 
 @keyframes App-logo-spin {

@@ -1,4 +1,6 @@
 .container {
+    background-color: #ffffff;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -6,16 +8,31 @@
     width: 180px;
     height: 300px;
     margin: 10px;
-    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+    padding: 16px;
+    box-shadow: rgb(3 0 71 / 9%) 0px 1px 3px;
 }
 
 .image {
     width: 160px;
     height: 100px;
     object-fit: cover;
-    border-radius: 4px;
+    border-radius: 8px;
+}
+
+.textTitle {
+    color: #373f50;
+    font-weight: 600;
+    padding-top: 10px;
+}
+
+.textPrice {
+    /*color: #D23F57;*/
+    /*color: #1976d2;*/
+    color: #4E97FD;
+    font-weight: 600;
 }
 
 .textAvailability {
-    font-size: 14px
+    font-size: 14px;
+    color: #373f50;
 }
