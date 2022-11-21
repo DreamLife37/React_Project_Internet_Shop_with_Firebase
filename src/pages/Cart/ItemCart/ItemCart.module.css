@@ -1,10 +1,15 @@
 .item {
+    background-color: #fff;
+    color: #282c34;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding-right: 10px;
     padding-left: 10px;
     align-items: center;
     padding-bottom: 10px;
+    box-shadow: 0px 4px 16px rgb(43 52 69 / 10%);
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
 }
 
 .image {
@@ -15,7 +20,27 @@
     margin-right: 20px;
 }
 
-.text {
-    padding-right: 26px;
+.secondColumn {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
 }
 
+.textTitle {
+padding-bottom: 10px;
+}
+
+
+.textPrice {
+    font-weight: 400;
+    padding-bottom: 10px;
+    color: #7D879C;
+}
+
+.textAmount {
+    color: #4E97FD;
+    font-weight: 600;
+}

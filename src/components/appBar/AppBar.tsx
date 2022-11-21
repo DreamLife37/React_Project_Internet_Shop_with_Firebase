@@ -13,7 +13,8 @@ import {Link, useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../hooks/redux-hooks";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import {logoutTC} from "../../store/slices/authSlice";
-
+// import {createTheme} from "@mui/material";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 export function MenuAppBar() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -40,9 +41,19 @@ export function MenuAppBar() {
         setAnchorEl(null);
     }
 
+    const darkTheme = createTheme({
+        palette: {
+            mode: 'dark',
+            primary: {
+                main: '#ff0048',
+            },
+        },
+    });
+
     return (
         <Box sx={{flexGrow: 1, height: '60px'}}>
-            <AppBar position="static">
+            <ThemeProvider theme={darkTheme}>
+            <AppBar position="static" color="primary" >
                 <Toolbar>
                     {/*<IconButton*/}
                     {/*    size="large"*/}
@@ -101,6 +112,7 @@ export function MenuAppBar() {
                     )}
                 </Toolbar>
             </AppBar>
+            </ThemeProvider>
         </Box>
     );
 }

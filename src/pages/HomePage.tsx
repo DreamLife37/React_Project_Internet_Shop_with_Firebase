@@ -50,7 +50,7 @@ export const HomePage = () => {
 
     return <div>
         {isAuth ? (!isInitialized ? <Preloader/> : '') : ''}
-        <h1>Главная</h1>
+        <h1 className={s.title}>Главная</h1>
 
         <div className={s.container}>{products.map(p => {
             return <ProductInCatalog key={p.id} title={p.title} id={p.id} availability={p.availability} image={p.image}

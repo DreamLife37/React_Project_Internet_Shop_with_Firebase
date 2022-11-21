@@ -7,6 +7,9 @@ import {ItemCartType} from "../../pages/Cart/ItemCart/ItemCart";
 import {handleServerNetworkError} from "../../utils/errorUtitls";
 import {AppRootStateType} from "../store";
 
+
+
+
 export const fetchAllProductsTC = createAsyncThunk<any>(
     'product/getAllProduct',
     async (_, {dispatch}) => {
@@ -209,11 +212,11 @@ export const fetchDataOrdersTC = createAsyncThunk(
     })
 
 
-type OrderModelType = {
+export type OrderModelType = {
     name: string,
     email: string,
     phone: string,
-    dateExample: string,
+    date: string,
     amountCart: number,
     items: Array<{
         name: string,

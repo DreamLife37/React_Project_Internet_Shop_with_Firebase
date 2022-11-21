@@ -15,6 +15,7 @@ import {LinearProgress} from "@mui/material";
 import {useAuth} from "./hooks/use-auth";
 import {fetchAllProductsTC, fetchDataCartTC} from "./store/slices/productSlice";
 import {initializeApp} from "./store/slices/appSlice";
+import {Order} from "./pages/Orders/MyOrders/Order/Order";
 
 function App() {
     const {isAuth, id} = useAuth()
@@ -27,7 +28,6 @@ function App() {
         if (id != null || isAuth) {
             dispatch(fetchDataCartTC({userId: id}))
             dispatch(fetchAllProductsTC())
-            // dispatch(initializeApp())
         }
     }, [])
 
@@ -56,6 +56,7 @@ function App() {
                     <Route path={'/cart'} element={<Cart/>}/>
                     <Route path={'/successfulOrder'} element={<SuccessfulOrder/>}/>
                     <Route path={'/myOrders'} element={<MyOrders/>}/>
+                    {/*<Route path={'/myOrders/order/:orderId'} element={<Order order={}/>}/>*/}
                 </Routes>
 
             </header>

@@ -9,9 +9,15 @@
     margin-left: 10px;
 }
 
+.titleAmountCart {
+    color: #7D879C;
+    /*color: #282c34;*/
+}
+
 .amountCart {
     font-weight: bold;
     padding-left: 10px;
+    color: #282c34;
 }
 
 .order {
