@@ -1,13 +1,11 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {collection, deleteField, doc, onSnapshot, query, setDoc, Timestamp, updateDoc} from "firebase/firestore";
+import {collection, deleteField, doc, onSnapshot, query, serverTimestamp, setDoc, Timestamp, updateDoc} from "firebase/firestore";
 import {db} from "../../firebase";
 import {ProductInCatalogType} from "../../components/ProductInCatalog/ProductInCatalog";
 import {initializeApp, setAppError, setAppStatus} from "./appSlice";
 import {ItemCartType} from "../../pages/Cart/ItemCart/ItemCart";
 import {handleServerNetworkError} from "../../utils/errorUtitls";
 import {AppRootStateType} from "../store";
-
-
 
 
 export const fetchAllProductsTC = createAsyncThunk<any>(
@@ -158,7 +156,7 @@ export const sendOrderTC = createAsyncThunk(
             count: number,
         }>
     }, {dispatch, getState}) => {
-
+debugger
         dispatch(setAppStatus({status: "loading"}))
         const state = getState() as AppRootStateType
         const userId = state.auth.id
@@ -170,11 +168,15 @@ export const sendOrderTC = createAsyncThunk(
                 email: param.email,
                 phone: param.phone,
                 amountCart: param.amountCart,
-                date: Timestamp.fromDate(new Date()),
+                 date: Timestamp.fromDate(new Date()).seconds,
+                //date: Timestamp.fromDate(new Date()).toDate(),
+
                 items: param.cartOrder
             }
+            console.log('Timestamp.fromDate(new Date())',Timestamp.fromDate(new Date()).toDate())
             console.log('orders', orders)
             try {
+                debugger
                 await setDoc(orderRef,
                     {
                         orders: orders ? [...orders, orderModel] : [orderModel]
@@ -232,7 +234,8 @@ type InitialStateType = {
         items: ItemCartType[],
         amount: number
     },
-    orders: OrderModelType[]
+    orders: OrderModelType[],
+    selectedOrderId: string
 }
 
 
@@ -242,7 +245,8 @@ const initialState: InitialStateType = {
         items: [],
         amount: 0
     },
-    orders: []
+    orders: [],
+    selectedOrderId: ''
 }
 
 
@@ -271,6 +275,9 @@ const productSlice = createSlice({
                 state.orders = action.payload
             }
         },
+        setSelectedOrder(state, action) {
+            state.selectedOrderId = action.payload
+        }
     },
     extraReducers: (builder) => {
         // builder.addCase(addToCartTC.fulfilled, (state, action) => {
@@ -280,5 +287,5 @@ const productSlice = createSlice({
         // })
     }
 })
-export const {setDataProducts, setDataCart, setAmountCart, setDataOrders} = productSlice.actions
+export const {setDataProducts, setDataCart, setAmountCart, setDataOrders, setSelectedOrder} = productSlice.actions
 export const productReducer = productSlice.reducer

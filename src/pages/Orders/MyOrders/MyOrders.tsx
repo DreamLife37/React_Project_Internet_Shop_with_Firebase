@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux-hooks";
-import {fetchDataOrdersTC, OrderModelType} from "../../../store/slices/productSlice";
-import {Link, Navigate, useNavigate} from "react-router-dom";
+import {fetchDataOrdersTC, OrderModelType, setSelectedOrder} from "../../../store/slices/productSlice";
+import {Link, Navigate, NavLink, useNavigate} from "react-router-dom";
 import {useAuth} from "../../../hooks/use-auth";
 import s from './MyOrders.module.css'
 import IconButton from "@mui/material/IconButton";
@@ -17,12 +17,15 @@ export const MyOrders = () => {
     const orders = useAppSelector(state => state.products.orders)
     // console.log(orders[29].date)
     const navigation = useNavigate()
+    const selectedOrderId = useAppSelector(state => state.products.selectedOrderId)
 
     const [currentOrder, setCurrentOrder] = useState()
 
     orders.map((i) => {
         // @ts-ignore
-        console.log(i.date)
+        //console.log(i.date)
+        console.log(new Date(+i.date * 1000))
+
     })
 
     // console.log(Timestamp.fromDate(new Date()))
@@ -35,12 +38,13 @@ export const MyOrders = () => {
         return <Navigate to={"/login"}/>
     }
 
-    const handleOrder = (order: OrderModelType) => {
-        debugger
-        console.log(order)
-         navigation('/myOrders')
+    const handleOrder = (selectedOrderId:string) => {
+        console.log(selectedOrderId)
+        // let orderId = order.
+        dispatch(setSelectedOrder(selectedOrderId))
+        navigation('/myOrders/order/')
         // setCurrentOrder()
-        return <Order order={order}/>
+        return <Order />
     }
 
     return <div className={s.container}>
@@ -61,8 +65,8 @@ export const MyOrders = () => {
                     <div className={s.item}>{`20.11.2022`}</div>
                     <div className={s.amountCart}>{order.amountCart} $</div>
                     <div className={s.amountCart}>
-                        <IconButton aria-label="arrow-forward" className={s.text} onClick={() => handleOrder(order)}>
-                            <ArrowForwardIcon style={{color: "#4E97FD"}} onClick={() => handleOrder(order)}/>
+                        <IconButton aria-label="arrow-forward" className={s.text} onClick={() => handleOrder(order.phone)}>
+                            <ArrowForwardIcon style={{color: "#4E97FD"}} onClick={() => handleOrder('1111111')}/>
                         </IconButton>
                     </div>
                     <Order order={order}/>
