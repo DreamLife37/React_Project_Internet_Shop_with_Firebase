@@ -16,7 +16,6 @@ export const Cart = () => {
     const cart = useAppSelector(state => state.products.cart)
     const appStatus = useAppSelector(state => state.app.status)
 
-    console.log(cart.items)
     const amountCart = useAppSelector(state => state.products.cart.amount)
 
     useEffect(() => {

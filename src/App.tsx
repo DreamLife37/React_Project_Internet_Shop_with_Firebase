@@ -56,7 +56,8 @@ function App() {
                     <Route path={'/cart'} element={<Cart/>}/>
                     <Route path={'/successfulOrder'} element={<SuccessfulOrder/>}/>
                     <Route path={'/myOrders'} element={<MyOrders/>}/>
-                    {/*<Route path={'/myOrders/order/:orderId'} element={<Order order={}/>}/>*/}
+                    <Route path={'/myOrders/order/'} element={<Order />}/>
+                    <Route path={'/myOrders/order/:orderId'} element={<Order />}/>
                 </Routes>
 
             </header>
