@@ -23,6 +23,7 @@ type OrderFormType = {
         name: string
         price: number
         count: number
+        image: string
     }>
 }
 

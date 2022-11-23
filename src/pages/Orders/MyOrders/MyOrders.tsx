@@ -18,18 +18,12 @@ export const MyOrders = () => {
     // console.log(orders[29].date)
     const navigation = useNavigate()
     const selectedOrderId = useAppSelector(state => state.products.selectedOrderId)
+    if (!!selectedOrderId) {
+        console.log(selectedOrderId)
+    }
 
-    const [currentOrder, setCurrentOrder] = useState()
+    // const [currentOrder, setCurrentOrder] = useState()
 
-    orders.map((i) => {
-        // @ts-ignore
-        //console.log(i.date)
-        console.log(new Date(+i.date * 1000))
-
-    })
-
-    // console.log(Timestamp.fromDate(new Date()))
-    // console.log(Timestamp.now().toDate())
     useEffect(() => {
         dispatch(fetchDataOrdersTC())
     }, [])
@@ -38,13 +32,13 @@ export const MyOrders = () => {
         return <Navigate to={"/login"}/>
     }
 
-    const handleOrder = (selectedOrderId:string) => {
+    const handleOrder = (selectedOrderId: string) => {
         console.log(selectedOrderId)
         // let orderId = order.
         dispatch(setSelectedOrder(selectedOrderId))
         navigation('/myOrders/order/')
         // setCurrentOrder()
-        return <Order />
+        return <Order/>
     }
 
     return <div className={s.container}>
@@ -58,19 +52,24 @@ export const MyOrders = () => {
             <div className={s.tableHeaderItem}></div>
         </div>
         {orders.length
-            ? orders.map((order, index) =>
-                <div className={s.orderWrapper} key={index}>
-                    <div className={s.item}>{`Заказ ${index + 1}`}</div>
+            ? orders.map((order, index) => {
+                let dateTransform = new Date(+order.date * 1000).toLocaleString()
+                return <div className={s.orderWrapper} key={index}>
+                    <div className={s.item}>{`Заказ ${index + 1}`}
+                        <div>#{order.orderId}</div>
+                    </div>
                     <div className={s.item}>{`Создан`}</div>
-                    <div className={s.item}>{`20.11.2022`}</div>
+                    <div className={s.item}>{`${dateTransform}`}</div>
                     <div className={s.amountCart}>{order.amountCart} $</div>
                     <div className={s.amountCart}>
-                        <IconButton aria-label="arrow-forward" className={s.text} onClick={() => handleOrder(order.phone)}>
-                            <ArrowForwardIcon style={{color: "#4E97FD"}} onClick={() => handleOrder('1111111')}/>
+                        <IconButton aria-label="arrow-forward" className={s.text}
+                                    onClick={() => handleOrder(order.orderId)}>
+                            <ArrowForwardIcon style={{color: "#4E97FD"}}/>
                         </IconButton>
                     </div>
-                    <Order order={order}/>
-                </div>)
+                </div>
+            })
+
 
             : <div>Список заказов пуст</div>}
     </div>

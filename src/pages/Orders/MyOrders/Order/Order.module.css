@@ -8,14 +8,54 @@
 }
 
 .items {
+    /*flex: 1 1 0;*/
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: flex-start;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: rgb(3 0 71 / 9%) 0px 1px 3px;
+    margin-bottom: 10px;
     color: #2B3445;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 20px;
+}
+
+.secondColumn {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
 }
 
 .text {
     padding-right: 10px;
+    color: #2B3445;
+    cursor: pointer;
+}
+
+.textPrice {
+    font-weight: 400;
+    padding-bottom: 10px;
+    color: #7D879C;
 }
 
 .amountCart {
