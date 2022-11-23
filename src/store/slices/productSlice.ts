@@ -1,5 +1,15 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {collection, deleteField, doc, onSnapshot, query, serverTimestamp, setDoc, Timestamp, updateDoc} from "firebase/firestore";
+import {
+    collection,
+    deleteField,
+    doc,
+    onSnapshot,
+    query,
+    serverTimestamp,
+    setDoc,
+    Timestamp,
+    updateDoc
+} from "firebase/firestore";
 import {db} from "../../firebase";
 import {ProductInCatalogType} from "../../components/ProductInCatalog/ProductInCatalog";
 import {initializeApp, setAppError, setAppStatus} from "./appSlice";
@@ -154,9 +164,10 @@ export const sendOrderTC = createAsyncThunk(
             name: string,
             price: number,
             count: number,
+            image: string
         }>
     }, {dispatch, getState}) => {
-debugger
+        debugger
         dispatch(setAppStatus({status: "loading"}))
         const state = getState() as AppRootStateType
         const userId = state.auth.id
@@ -164,16 +175,14 @@ debugger
         if (userId != null) {
             const orderRef = doc(db, 'cart', userId)
             const orderModel = {
+                orderId: Timestamp.fromDate(new Date()).seconds,
                 name: param.name,
                 email: param.email,
                 phone: param.phone,
                 amountCart: param.amountCart,
-                 date: Timestamp.fromDate(new Date()).seconds,
-                //date: Timestamp.fromDate(new Date()).toDate(),
-
+                date: Timestamp.fromDate(new Date()).seconds,
                 items: param.cartOrder
             }
-            console.log('Timestamp.fromDate(new Date())',Timestamp.fromDate(new Date()).toDate())
             console.log('orders', orders)
             try {
                 debugger
@@ -213,8 +222,8 @@ export const fetchDataOrdersTC = createAsyncThunk(
         }
     })
 
-
 export type OrderModelType = {
+    orderId: string,
     name: string,
     email: string,
     phone: string,
@@ -224,7 +233,8 @@ export type OrderModelType = {
         name: string,
         price: number,
         count: number,
-        amountCart: number
+        amountCart: number,
+        image: string
     }>
 }
 

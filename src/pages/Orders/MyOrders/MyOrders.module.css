@@ -39,8 +39,10 @@
     font-weight: 400;
 }
 
-.item {
-
+.item div {
+    font-weight: 400;
+    padding-bottom: 10px;
+    color: #7D879C;
 }
 
 .amountCart {

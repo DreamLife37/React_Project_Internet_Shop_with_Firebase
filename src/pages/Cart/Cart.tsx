@@ -32,13 +32,13 @@ export const Cart = () => {
 
     let cartOrder = cart.items.map((i) => {
         return {
-            name: i.title, price: i.price, count: i.count,
+            name: i.title, price: i.price, count: i.count, image: i.image
         }
     })
 
     return <div className={s.container}>
         {appStatus === 'loading' && <Box sx={{display: 'flex'}}>
-            <LinearProgress />
+            <LinearProgress/>
         </Box>}
         <div className={s.cart}>
             {
