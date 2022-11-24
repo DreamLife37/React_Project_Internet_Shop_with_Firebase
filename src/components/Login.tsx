@@ -25,7 +25,7 @@ export const Login = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then(({user}) => {
                 dispatch(setAuthData({email: user.email, token: user.refreshToken, id: user.uid}))
-                dispatch(setAppStatus({status: "succeeded"}))
+                dispatch(setAppStatus({status: "idle"}))
                 return navigation("/")
             })
             .catch((err: firebase.FirebaseError) => {
@@ -36,7 +36,7 @@ export const Login = () => {
                     dispatch(setAppError({error: {messageError: `Ошибка`, typeError: 'error'}}))
                 }
             })
-            .finally(()=>{
+            .finally(() => {
                 dispatch(setAppStatus({status: "idle"}))
             })
     }

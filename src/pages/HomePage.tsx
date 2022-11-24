@@ -7,6 +7,7 @@ import {ProductInCatalog,} from '../components/ProductInCatalog/ProductInCatalog
 import {fetchAllProductsTC, fetchDataCartTC} from "../store/slices/productSlice";
 import s from './HomePage.module.css'
 import {Preloader} from "../components/preloader/Preloader";
+import {setAppStatus} from "../store/slices/appSlice";
 
 export type AddToCartType = {
     title: string,
@@ -25,7 +26,8 @@ export const HomePage = () => {
     const cart = useAppSelector(state => state.products.cart)
     const amountCart = useAppSelector(state => state.products.cart.amount)
     const isInitialized = useAppSelector(state => state.app.isInitialized)
-
+    const status = useAppSelector(state => state.app.status)
+    console.log(status)
 
     const handlerLogout = () => {
         dispatch(removeAuthData())
@@ -35,12 +37,6 @@ export const HomePage = () => {
         if (id != null || isAuth) {
             dispatch(fetchAllProductsTC())
             dispatch(fetchDataCartTC({userId: id}))
-                // .then((res)=>{
-                //     if (res.meta.requestStatus === "fulfilled") {
-                //         console.log(res)
-                //         // dispatch(initializeApp())
-                //     }
-                // })
         }
     }, [])
 

@@ -30,11 +30,17 @@ export const Order: FC = () => {
     let selectedOrder = orders.find((order) => {
         return order.orderId === selectedOrderId
     })
-    console.log(selectedOrder)
+
+    let dateTransform
+
+    if (selectedOrder) {
+        dateTransform = new Date(+selectedOrder.date * 1000).toLocaleString()
+    }
+
 
     return <div className={s.container}>
         {selectedOrder && <div>
-            <div onClick={handleBackButton} className={s.text}>
+            <div onClick={handleBackButton} className={s.titleButtonBack}>
                 <IconButton aria-label="arrow-back"
                             onClick={handleBackButton}>
                     <ArrowBackIcon style={{color: "#4E97FD"}}/>
@@ -43,6 +49,10 @@ export const Order: FC = () => {
             </div>
 
             <h3 className={s.title}>{`Заказ #${selectedOrder.orderId}`}</h3>
+            <div className={s.date}>
+                Дата создания:
+                <div>{dateTransform}</div>
+            </div>
             <div className={s.items}>{selectedOrder.items.map((i, key) =>
                 <div key={key} className={s.item}>
                     <img src={i.image} className={s.image}/>
@@ -52,7 +62,7 @@ export const Order: FC = () => {
                     </div>
                 </div>)
             }</div>
-            <div className={s.amountCart}>Сумма заказа: {selectedOrder.amountCart} $</div>
+            <div className={s.amountCart}>Сумма заказа: <span>{selectedOrder.amountCart} $</span></div>
         </div>
         }
     </div>

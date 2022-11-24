@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import './App.css';
-import {LoginPage} from './pages/LoginPage';
-import {RegisterPage} from './pages/RegisterPage';
+import {LoginPage} from './pages/LoginPage/LoginPage';
+import {RegisterPage} from './pages/RegisterPage/RegisterPage';
 import {Route, Routes} from 'react-router-dom';
 import {HomePage} from "./pages/HomePage";
 import {Cart} from "./pages/Cart/Cart";
@@ -26,21 +26,10 @@ function App() {
 
     useEffect(() => {
         if (id != null || isAuth) {
-            dispatch(fetchDataCartTC({userId: id}))
             dispatch(fetchAllProductsTC())
+            dispatch(fetchDataCartTC({userId: id}))
         }
-    }, [])
-
-    // if (isAuth) {
-    //     console.log(!isInitialized)
-    //     if (!isInitialized) {
-    //         return <div>
-    //             {/*style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>*/}
-    //             <Preloader/>
-    //         </div>
-    //     }
-    // }
-    // {!isInitialized && isAuth && <Preloader/>}
+    }, [dispatch])
 
     return (
         <div className="App">

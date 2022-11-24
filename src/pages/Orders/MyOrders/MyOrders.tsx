@@ -1,28 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux-hooks";
-import {fetchDataOrdersTC, OrderModelType, setSelectedOrder} from "../../../store/slices/productSlice";
-import {Link, Navigate, NavLink, useNavigate} from "react-router-dom";
+import {fetchDataOrdersTC, setSelectedOrder} from "../../../store/slices/productSlice";
+import {Navigate, useNavigate} from "react-router-dom";
 import {useAuth} from "../../../hooks/use-auth";
 import s from './MyOrders.module.css'
 import IconButton from "@mui/material/IconButton";
-import AddBoxIcon from "@mui/icons-material/AddBox";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import {serverTimestamp, Timestamp} from "firebase/firestore";
-import {Order} from "./Order/Order";
-
 
 export const MyOrders = () => {
     const dispatch = useAppDispatch()
-    const {isAuth, id} = useAuth()
+    const {isAuth} = useAuth()
     const orders = useAppSelector(state => state.products.orders)
-    // console.log(orders[29].date)
     const navigation = useNavigate()
-    const selectedOrderId = useAppSelector(state => state.products.selectedOrderId)
-    if (!!selectedOrderId) {
-        console.log(selectedOrderId)
-    }
-
-    // const [currentOrder, setCurrentOrder] = useState()
 
     useEffect(() => {
         dispatch(fetchDataOrdersTC())
@@ -34,20 +23,16 @@ export const MyOrders = () => {
 
     const handleOrder = (selectedOrderId: string) => {
         console.log(selectedOrderId)
-        // let orderId = order.
         dispatch(setSelectedOrder(selectedOrderId))
         navigation('/myOrders/order/')
-        // setCurrentOrder()
-        return <Order/>
     }
 
     return <div className={s.container}>
-
         <h2 className={s.title}>Мои заказы</h2>
         <div className={s.tableHeader}>
             <div className={s.tableHeaderItem}>№ заказа</div>
-            <div className={s.tableHeaderItem}>Статус</div>
-            <div className={s.tableHeaderItem}>Дата создания</div>
+            <div className={s.tableHeaderStatus}>Статус</div>
+            <div className={s.tableHeaderDate}>Дата создания</div>
             <div className={s.tableHeaderItem}>Сумма заказа</div>
             <div className={s.tableHeaderItem}></div>
         </div>
@@ -70,7 +55,6 @@ export const MyOrders = () => {
                 </div>
             })
 
-
-            : <div>Список заказов пуст</div>}
+            : <div className={s.emptyCart}>Список заказов пуст</div>}
     </div>
 }
