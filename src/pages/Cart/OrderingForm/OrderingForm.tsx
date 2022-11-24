@@ -6,8 +6,7 @@ import {useAppDispatch, useAppSelector} from "../../../hooks/redux-hooks";
 import {useAuth} from "../../../hooks/use-auth";
 import {useNavigate} from 'react-router-dom';
 import FormControl from "@mui/material/FormControl";
-import Button from "@mui/material/Button";
-import {CircularProgress, TextField} from "@mui/material";
+import {TextField} from "@mui/material";
 import {setAppError, setAppStatus} from "../../../store/slices/appSlice";
 import Box from "@mui/material/Box";
 import {ButtonWithLoading} from "../../../components/ButtonWithLoading/ButtonWithLoading";
@@ -32,8 +31,6 @@ export const OrderingForm: React.FC<OrderFormType> = ({
                                                       }) => {
     const dispatch = useAppDispatch()
     const amountCart = useAppSelector(state => state.products.cart.amount)
-    const isLoading = useAppSelector(state => state.app.isLoading)
-    const appStatus = useAppSelector(state => state.app.status)
 
     const {id} = useAuth()
 
@@ -62,7 +59,8 @@ export const OrderingForm: React.FC<OrderFormType> = ({
         },
         onSubmit: async values => {
             if (navigator.onLine) {
-                //dispatch(setAppStatus({status: "loading"}))
+                debugger
+                dispatch(setAppStatus({status: "loading"}))
                 if (cartOrder.length > 0) {
                     dispatch(sendOrderTC({
                         name: values.name,
@@ -73,7 +71,7 @@ export const OrderingForm: React.FC<OrderFormType> = ({
                     }))
                         .then((res) => {
                             if (res.meta.requestStatus === "fulfilled") {
-                                // dispatch(setAppStatus({status: "succeeded"}))
+                                // dispatch(setAppStatus({status: "idle"}))
                                 dispatch(removeAllItemCartTC({userId: id}))
                                 navigate('/successfulOrder');
                             } else {
@@ -101,15 +99,16 @@ export const OrderingForm: React.FC<OrderFormType> = ({
                             typeError: 'warning'
                         }
                     }))
+                    dispatch(setAppStatus({status: "failed"}))
                 }
             } else {
                 dispatch(setAppError({error: {messageError: "Проверьте доступ к интернет", typeError: 'error'}}))
+                dispatch(setAppStatus({status: "failed"}))
             }
         },
     })
 
     const disabledButton = (!formik.values.email || !formik.values.name || !formik.values.phone || !!formik.errors.email)
-
 
     return <Box className={s.container}>
         <form onSubmit={formik.handleSubmit} className={s.form}>

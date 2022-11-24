@@ -18,7 +18,8 @@ export const logoutTC = createAsyncThunk<any>(
                 }
             }).catch((error) => {
             handleServerNetworkError(dispatch)
-        });
+
+        })
     })
 
 

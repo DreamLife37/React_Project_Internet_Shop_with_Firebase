@@ -20,7 +20,7 @@ export const ButtonWithLoading: FC<ButtonWithLoadingPropsType> = ({title, disabl
     // const timer = React.useRef<number>();
 
     const buttonSx = {
-        ...(appStatus == 'succeeded' && {
+        ...(appStatus === 'succeeded' && {
             bgcolor: green[500],
             '&:hover': {
                 bgcolor: green[700],

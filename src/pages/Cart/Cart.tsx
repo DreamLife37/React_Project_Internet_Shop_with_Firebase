@@ -1,13 +1,13 @@
 import s from './Cart.module.css'
-import {fetchDataCartTC, fetchDataOrdersTC} from "../../store/slices/productSlice";
+import {fetchDataCartTC} from "../../store/slices/productSlice";
 import {useAuth} from "../../hooks/use-auth";
 import React, {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../hooks/redux-hooks";
 import {ItemCart} from "./ItemCart/ItemCart";
-import {Link, Navigate} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import {OrderingForm} from "./OrderingForm/OrderingForm";
 import Box from "@mui/material/Box";
-import {CircularProgress, LinearProgress} from "@mui/material";
+import {LinearProgress} from "@mui/material";
 
 export const Cart = () => {
     const {id, isAuth} = useAuth()
@@ -20,10 +20,9 @@ export const Cart = () => {
 
     useEffect(() => {
         if (id != null) {
-            dispatch(fetchDataCartTC({userId: id}))
-            dispatch(fetchDataOrdersTC())
+            // dispatch(fetchDataCartTC({userId: id}))
         }
-    }, [])
+    }, [dispatch])
 
 
     if (!isAuth) {
@@ -54,7 +53,7 @@ export const Cart = () => {
                                          availability={i.availability}
                         />
                     })
-                    : <div>Корзина пуста</div>
+                    : <div className={s.emptyCart}>Корзина пуста</div>
             }
 
             {cart.items.length > 0 && <div className={s.titleAmountCart}>Сумма:
