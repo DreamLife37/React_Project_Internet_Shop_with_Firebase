@@ -8,8 +8,16 @@
     width: 180px;
     height: 300px;
     margin: 10px;
-    padding: 16px;
+    padding-bottom: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
     box-shadow: rgb(3 0 71 / 9%) 0px 1px 3px;
+}
+
+.countItemsCart {
+    height: 26px;
+    margin-bottom: 10px;
+    margin-left: 80px;
 }
 
 .image {
@@ -26,8 +34,6 @@
 }
 
 .textPrice {
-    /*color: #D23F57;*/
-    /*color: #1976d2;*/
     color: #4E97FD;
     font-weight: 600;
 }

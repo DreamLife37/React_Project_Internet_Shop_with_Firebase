@@ -56,9 +56,9 @@ export const Cart = () => {
                     : <div className={s.emptyCart}>Корзина пуста</div>
             }
 
-            {cart.items.length > 0 && <div className={s.titleAmountCart}>Сумма:
+            {cart.items.length > 0 && <span className={s.titleAmountCart}>Сумма:
                 <span className={s.amountCart}>{`${amountCart} $`}</span>
-            </div>}
+            </span>}
         </div>
         <div className={s.order}><OrderingForm cartOrder={cartOrder}/></div>
     </div>

@@ -16,7 +16,6 @@ export const Order: FC = () => {
 
     const handleBackButton = () => {
         navigation('/myOrders')
-        console.log()
     }
 
     useEffect(() => {

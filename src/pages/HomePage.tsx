@@ -29,9 +29,6 @@ export const HomePage = () => {
 
     const appStatus = useAppSelector(state => state.app.status)
 
-    console.log(appStatus)
-
-
     useEffect(() => {
         if (id != null || isAuth) {
             dispatch(fetchAllProductsTC())
