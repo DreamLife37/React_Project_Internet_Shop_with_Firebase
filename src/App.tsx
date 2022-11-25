@@ -24,12 +24,6 @@ function App() {
     const appStatus = useAppSelector(state => state.app.status)
     const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        if (id != null || isAuth) {
-            dispatch(fetchAllProductsTC())
-            dispatch(fetchDataCartTC({userId: id}))
-        }
-    }, [dispatch])
 
     return (
         <div className="App">
@@ -45,8 +39,8 @@ function App() {
                     <Route path={'/cart'} element={<Cart/>}/>
                     <Route path={'/successfulOrder'} element={<SuccessfulOrder/>}/>
                     <Route path={'/myOrders'} element={<MyOrders/>}/>
-                    <Route path={'/myOrders/order/'} element={<Order />}/>
-                    <Route path={'/myOrders/order/:orderId'} element={<Order />}/>
+                    <Route path={'/myOrders/order/'} element={<Order/>}/>
+                    <Route path={'/myOrders/order/:orderId'} element={<Order/>}/>
                 </Routes>
 
             </header>

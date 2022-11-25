@@ -5,8 +5,9 @@ import {addToCartTC, updateItemCartTC} from "../../store/slices/productSlice";
 import {setAppError} from "../../store/slices/appSlice";
 import Button from "@mui/material/Button";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import { Fade } from 'react-awesome-reveal';
+import {Fade} from 'react-awesome-reveal';
 import Tilt from "react-parallax-tilt";
+import {ButtonCustomBlue} from "../ButtonCustomBlue/ButtonCustomBlue";
 
 
 declare module '@mui/material/styles' {
@@ -45,6 +46,7 @@ export const ProductInCatalog: FC<ProductInCatalogType> = ({
     const itemsCart = useAppSelector(state => state.products.cart.items)
     const userId = useAppSelector(state => state.auth.id)
     const dispatch = useAppDispatch()
+    console.log(itemsCart)
 
     const addToCartHandler = () => {
         let currentItemCart = itemsCart.find((i) => i.idItem === id)
@@ -67,29 +69,15 @@ export const ProductInCatalog: FC<ProductInCatalogType> = ({
         }
     }
 
-
-    const theme = createTheme({
-        palette: {
-            neutral: {
-                main: '#4E97FD',
-                contrastText: '#fff',
-            },
-        },
-    });
-
-
     return <div className={s.container}>
         <Fade delay={100} triggerOnce duration={500}>
+            <div style={{color: "black"}}>11</div>
             <Tilt tiltEnable={false} scale={1.2} transitionSpeed={2500}>
                 <img src={image} className={s.image}/> </Tilt>
-        <div className={s.textTitle}>{title}</div>
-        <div className={s.textPrice}>{price} $</div>
-        <div className={s.textAvailability}>Наличие {availability}</div>
-
-        <ThemeProvider theme={theme}>
-            <Button style={{marginTop: '10px', fontSize: '0.7rem'}} variant="contained" color="neutral" onClick={() => {
-                addToCartHandler()
-            }}>Добавить в корзину</Button> </ThemeProvider>
+            <div className={s.textTitle}>{title}</div>
+            <div className={s.textPrice}>{price} $</div>
+            <div className={s.textAvailability}>Наличие {availability}</div>
+            <ButtonCustomBlue handleButton={addToCartHandler} title={'Добавить в корзину'}/>
         </Fade>
     </div>
 }

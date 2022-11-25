@@ -83,7 +83,7 @@ export const fetchDataCartTC = createAsyncThunk(
                         const amount = (itemsArr.reduce((a: any, v: { price: number; count: number }) => a = a + v.price * v.count, 0));
                         dispatch(setAmountCart(amount))
                         debugger
-                        dispatch(setAppStatus({status: "idle"}))
+                        // dispatch(setAppStatus({status: "idle"}))
                     } else {
                         throw new Error("New error")
                     }
@@ -189,7 +189,8 @@ export const sendOrderTC = createAsyncThunk(
                         orders: orders ? [...orders, orderModel] : [orderModel]
                     },
                     {merge: true})
-                dispatch(setAppStatus({status: "idle"}))
+                // dispatch(setAppStatus({status: "idle"}))
+
             } catch (e) {
                 handleServerNetworkError(dispatch)
                 dispatch(setAppStatus({status: "failed"}))
