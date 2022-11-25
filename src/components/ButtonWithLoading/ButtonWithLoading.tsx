@@ -14,11 +14,6 @@ type ButtonWithLoadingPropsType = {
 export const ButtonWithLoading: FC<ButtonWithLoadingPropsType> = ({title, disabledButton}) => {
     const appStatus = useAppSelector(state => state.app.status)
 
-    // const [loading, setLoading] = React.useState(false);
-    //
-    // const [success, setSuccess] = React.useState(false);
-    // const timer = React.useRef<number>();
-
     const buttonSx = {
         ...(appStatus === 'succeeded' && {
             bgcolor: green[500],
@@ -28,32 +23,14 @@ export const ButtonWithLoading: FC<ButtonWithLoadingPropsType> = ({title, disabl
         }),
     };
 
-    // React.useEffect(() => {
-    //     return () => {
-    //         clearTimeout(timer.current);
-    //     };
-    // }, []);
-
-    // const handleButtonClick = () => {
-    //     if (!loading) {
-    //         setSuccess(false);
-    //         setLoading(true);
-    //         timer.current = window.setTimeout(() => {
-    //             setSuccess(true);
-    //             setLoading(false);
-    //         }, 2000);
-    //     }
-    // };
-
     return (
         <Box sx={{display: 'flex', alignItems: 'center'}}>
 
             <Box sx={{m: 1, position: 'relative'}}>
                 <Button
                     variant="contained"
-                    sx={buttonSx}
+                    sx={{backgroundColor: '#4E97FD'}}
                     disabled={appStatus === 'loading' || disabledButton}
-                    // onClick={handleButtonClick}
                     type={'submit'}
                 >
                     {title}

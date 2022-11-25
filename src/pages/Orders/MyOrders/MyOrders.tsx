@@ -22,7 +22,6 @@ export const MyOrders = () => {
     }
 
     const handleOrder = (selectedOrderId: string) => {
-        console.log(selectedOrderId)
         dispatch(setSelectedOrder(selectedOrderId))
         navigation('/myOrders/order/')
     }
@@ -30,10 +29,10 @@ export const MyOrders = () => {
     return <div className={s.container}>
         <h2 className={s.title}>Мои заказы</h2>
         <div className={s.tableHeader}>
-            <div className={s.tableHeaderItem}>№ заказа</div>
+            <div className={s.tableHeaderItem}>№</div>
             <div className={s.tableHeaderStatus}>Статус</div>
-            <div className={s.tableHeaderDate}>Дата создания</div>
-            <div className={s.tableHeaderItem}>Сумма заказа</div>
+            <div className={s.tableHeaderDate}>Дата</div>
+            <div className={s.tableHeaderItem}>Сумма</div>
             <div className={s.tableHeaderItem}></div>
         </div>
         {orders.length

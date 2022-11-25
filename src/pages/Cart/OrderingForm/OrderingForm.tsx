@@ -71,7 +71,8 @@ export const OrderingForm: React.FC<OrderFormType> = ({
                     }))
                         .then((res) => {
                             if (res.meta.requestStatus === "fulfilled") {
-                                // dispatch(setAppStatus({status: "idle"}))
+                                debugger
+                                dispatch(setAppStatus({status: "idle"}))
                                 dispatch(removeAllItemCartTC({userId: id}))
                                 navigate('/successfulOrder');
                             } else {

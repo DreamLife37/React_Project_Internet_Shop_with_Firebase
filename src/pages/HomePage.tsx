@@ -26,19 +26,15 @@ export const HomePage = () => {
     const cart = useAppSelector(state => state.products.cart)
     const amountCart = useAppSelector(state => state.products.cart.amount)
     const isInitialized = useAppSelector(state => state.app.isInitialized)
-    const status = useAppSelector(state => state.app.status)
-    console.log(status)
 
-    const handlerLogout = () => {
-        dispatch(removeAuthData())
-    }
+    const appStatus = useAppSelector(state => state.app.status)
 
     useEffect(() => {
         if (id != null || isAuth) {
             dispatch(fetchAllProductsTC())
             dispatch(fetchDataCartTC({userId: id}))
         }
-    }, [])
+    }, [dispatch])
 
     if (!isAuth) {
         return <Navigate to={"/login"}/>

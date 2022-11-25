@@ -16,7 +16,6 @@ import {ItemCartType} from "../../pages/Cart/ItemCart/ItemCart";
 import {handleServerNetworkError} from "../../utils/errorUtitls";
 import {AppRootStateType} from "../store";
 
-
 export const fetchAllProductsTC = createAsyncThunk<any>(
     'product/getAllProduct',
     async (_, {dispatch}) => {
@@ -82,8 +81,6 @@ export const fetchDataCartTC = createAsyncThunk(
                         const itemsArr = state.products.cart.items
                         const amount = (itemsArr.reduce((a: any, v: { price: number; count: number }) => a = a + v.price * v.count, 0));
                         dispatch(setAmountCart(amount))
-                        debugger
-                        dispatch(setAppStatus({status: "idle"}))
                     } else {
                         throw new Error("New error")
                     }
@@ -119,7 +116,6 @@ export const removeItemCartTC = createAsyncThunk(
     'product/removeItemCart',
     async (param: { itemId: string, userId: string | null }, {dispatch}) => {
         dispatch(setAppStatus({status: "loading"}))
-
         if (param.userId != null) {
             try {
                 if (navigator.onLine) {
@@ -182,14 +178,12 @@ export const sendOrderTC = createAsyncThunk(
                 date: Timestamp.fromDate(new Date()).seconds,
                 items: param.cartOrder
             }
-            console.log('orders', orders)
             try {
                 await setDoc(orderRef,
                     {
                         orders: orders ? [...orders, orderModel] : [orderModel]
                     },
                     {merge: true})
-                dispatch(setAppStatus({status: "idle"}))
             } catch (e) {
                 handleServerNetworkError(dispatch)
                 dispatch(setAppStatus({status: "failed"}))
