@@ -1,7 +1,7 @@
 import React from "react";
 import {useFormik} from "formik";
 import s from './Ordering.module.css'
-import {removeAllItemCartTC, sendOrderTC} from "../../../store/slices/productSlice";
+import {removeAllItemCartTC, sendOrderTC, sendUserProfileDataTC} from "../../../store/slices/productSlice";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux-hooks";
 import {useAuth} from "../../../hooks/use-auth";
 import {useNavigate} from 'react-router-dom';
@@ -31,6 +31,10 @@ export const OrderingForm: React.FC<OrderFormType> = ({
                                                       }) => {
     const dispatch = useAppDispatch()
     const amountCart = useAppSelector(state => state.products.cart.amount)
+    const nameProfile = useAppSelector(state => state.products.profile.name)
+    const emailProfile = useAppSelector(state => state.products.profile.email)
+    const phoneProfile = useAppSelector(state => state.products.profile.phone)
+
 
     const {id} = useAuth()
 
@@ -38,9 +42,9 @@ export const OrderingForm: React.FC<OrderFormType> = ({
 
     const formik = useFormik({
         initialValues: {
-            name: '',
-            email: '',
-            phone: ''
+            name: nameProfile,
+            email: emailProfile,
+            phone: phoneProfile
         },
         validate: (values) => {
             const errors: FormikErrorType = {};
@@ -62,6 +66,11 @@ export const OrderingForm: React.FC<OrderFormType> = ({
                 debugger
                 dispatch(setAppStatus({status: "loading"}))
                 if (cartOrder.length > 0) {
+                    dispatch(sendUserProfileDataTC({
+                        name: values.name,
+                        email: values.email,
+                        phone: values.phone
+                    }))
                     dispatch(sendOrderTC({
                         name: values.name,
                         email: values.email,

@@ -165,6 +165,7 @@ export const sendOrderTC = createAsyncThunk(
     }, {dispatch, getState}) => {
         dispatch(setAppStatus({status: "loading"}))
         const state = getState() as AppRootStateType
+        debugger
         const userId = state.auth.id
         const orders = state.products.orders
         if (userId != null) {
@@ -216,6 +217,63 @@ export const fetchDataOrdersTC = createAsyncThunk(
         }
     })
 
+
+export const sendUserProfileDataTC = createAsyncThunk(
+    'product/sendUserProfileData',
+    async (param: {
+        name: string, email: string, phone: string
+    }, {dispatch, getState}) => {
+        dispatch(setAppStatus({status: "loading"}))
+        const state = getState() as AppRootStateType
+        const userId = state.auth.id
+        const profile = state.products.profile
+        console.log(profile.email)
+        console.log(!profile.email)
+        if (userId != null && !profile.email) {
+            const orderRef = doc(db, 'cart', userId)
+            try {
+                await setDoc(orderRef,
+                    {
+                        profile: {
+                            name: param.name,
+                            email: param.email,
+                            phone: param.phone,
+                        }
+                    },
+                    {merge: true})
+            } catch (e) {
+                handleServerNetworkError(dispatch)
+                dispatch(setAppStatus({status: "failed"}))
+            }
+        }
+    })
+
+export const fetchDataUserProfileTC = createAsyncThunk(
+    'product/fetchDataUserProfile',
+    async (_, {dispatch, getState}) => {
+        dispatch(setAppStatus({status: "loading"}))
+        const state = getState() as AppRootStateType
+        const userId = state.auth.id
+        if (userId != null) {
+            try {
+                if (navigator.onLine) {
+                    const cartRef = doc(db, '/cart', userId)
+                    onSnapshot(cartRef, (itemOrder) => {
+                        if (itemOrder.exists()) {
+                            console.log(itemOrder.data().profile)
+                            dispatch(setDataUserProfile(itemOrder.data().profile))
+                        }
+                    })
+                } else {
+                    throw new Error("No Internet")
+                }
+            } catch (e) {
+                handleServerNetworkError(dispatch)
+            }
+        }
+    })
+
+
 export type OrderModelType = {
     orderId: string,
     name: string,
@@ -238,7 +296,12 @@ type InitialStateType = {
         amount: number
     },
     orders: OrderModelType[],
-    selectedOrderId: string
+    selectedOrderId: string,
+    profile: {
+        name: string,
+        email: string,
+        phone: string
+    }
 }
 
 
@@ -249,7 +312,12 @@ const initialState: InitialStateType = {
         amount: 0
     },
     orders: [],
-    selectedOrderId: ''
+    selectedOrderId: '',
+    profile: {
+        name: '',
+        email: '',
+        phone: ''
+    }
 }
 
 
@@ -280,8 +348,20 @@ const productSlice = createSlice({
         },
         setSelectedOrder(state, action) {
             state.selectedOrderId = action.payload
+        },
+        setDataUserProfile(state, action) {
+            if (action.payload !== undefined) {
+                state.profile = action.payload
+            }
         }
     },
 })
-export const {setDataProducts, setDataCart, setAmountCart, setDataOrders, setSelectedOrder} = productSlice.actions
+export const {
+    setDataProducts,
+    setDataCart,
+    setAmountCart,
+    setDataOrders,
+    setSelectedOrder,
+    setDataUserProfile
+} = productSlice.actions
 export const productReducer = productSlice.reducer
