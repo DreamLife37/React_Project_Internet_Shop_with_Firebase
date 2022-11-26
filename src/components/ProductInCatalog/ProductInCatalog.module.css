@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: center;
     width: 180px;
-    height: 300px;
+    height: 310px;
     margin: 10px;
     padding-bottom: 16px;
     padding-left: 16px;
@@ -16,8 +16,8 @@
 
 .countItemsCart {
     height: 26px;
-    margin-bottom: 10px;
-    margin-left: 80px;
+    margin-bottom: 8px;
+    margin-left: 100px;
 }
 
 .image {
@@ -30,7 +30,8 @@
 .textTitle {
     color: #373f50;
     font-weight: 600;
-    padding-top: 10px;
+    font-size: 20px;
+    padding-top: 8px;
 }
 
 .textPrice {

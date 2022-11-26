@@ -156,7 +156,7 @@ export const removeAllItemCartTC = createAsyncThunk(
 export const sendOrderTC = createAsyncThunk(
     'product/sendOrder',
     async (param: {
-        name: string, email: string, phone: string, amountCart: number, cartOrder: Array<{
+        name: string, email: string, phone: string, amountCart: number, message: string, cartOrder: Array<{
             name: string,
             price: number,
             count: number,
@@ -175,6 +175,7 @@ export const sendOrderTC = createAsyncThunk(
                 name: param.name,
                 email: param.email,
                 phone: param.phone,
+                message: param.message,
                 amountCart: param.amountCart,
                 date: Timestamp.fromDate(new Date()).seconds,
                 items: param.cartOrder
@@ -198,6 +199,7 @@ export const fetchDataOrdersTC = createAsyncThunk(
         dispatch(setAppStatus({status: "loading"}))
         const state = getState() as AppRootStateType
         const userId = state.auth.id
+        debugger
         if (userId != null) {
             try {
                 if (navigator.onLine) {
@@ -210,6 +212,7 @@ export const fetchDataOrdersTC = createAsyncThunk(
                     })
                 } else {
                     throw new Error("No Internet")
+                    dispatch(setAppStatus({status: "failed"}))
                 }
             } catch (e) {
                 handleServerNetworkError(dispatch)
@@ -223,12 +226,11 @@ export const sendUserProfileDataTC = createAsyncThunk(
     async (param: {
         name: string, email: string, phone: string
     }, {dispatch, getState}) => {
+        debugger
         dispatch(setAppStatus({status: "loading"}))
         const state = getState() as AppRootStateType
         const userId = state.auth.id
         const profile = state.products.profile
-        console.log(profile.email)
-        console.log(!profile.email)
         if (userId != null && !profile.email) {
             const orderRef = doc(db, 'cart', userId)
             try {
@@ -254,13 +256,13 @@ export const fetchDataUserProfileTC = createAsyncThunk(
         dispatch(setAppStatus({status: "loading"}))
         const state = getState() as AppRootStateType
         const userId = state.auth.id
+        debugger
         if (userId != null) {
             try {
                 if (navigator.onLine) {
                     const cartRef = doc(db, '/cart', userId)
                     onSnapshot(cartRef, (itemOrder) => {
                         if (itemOrder.exists()) {
-                            console.log(itemOrder.data().profile)
                             dispatch(setDataUserProfile(itemOrder.data().profile))
                         }
                     })
@@ -280,6 +282,7 @@ export type OrderModelType = {
     email: string,
     phone: string,
     date: string,
+    message: string,
     amountCart: number,
     items: Array<{
         name: string,

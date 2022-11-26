@@ -36,7 +36,6 @@ export const Order: FC = () => {
         dateTransform = new Date(+selectedOrder.date * 1000).toLocaleString()
     }
 
-
     return <div className={s.container}>
         {selectedOrder && <div>
             <div onClick={handleBackButton} className={s.titleButtonBack}>
@@ -52,16 +51,25 @@ export const Order: FC = () => {
                 Дата создания:
                 <div>{dateTransform}</div>
             </div>
-            <div className={s.items}>{selectedOrder.items.map((i, key) =>
-                <div key={key} className={s.item}>
-                    <img src={i.image} className={s.image}/>
-                    <div className={s.secondColumn}>
-                        <span className={s.text}>{i.name}</span>
-                        <div className={s.textPrice}>{i.price} $ x {i.count} </div>
-                    </div>
-                </div>)
-            }</div>
-            <div className={s.amountCart}>Сумма заказа: <span>{selectedOrder.amountCart} $</span></div>
+            <div className={s.wrapper}>
+                <div className={s.items}>{selectedOrder.items.map((i, key) =>
+                    <div key={key} className={s.item}>
+                        <img src={i.image} className={s.image}/>
+                        <div className={s.secondColumn}>
+                            <span className={s.name}>{i.name}</span>
+                            <div className={s.textPrice}>{i.price} $ x {i.count} </div>
+                        </div>
+                    </div>)
+                }
+                    <div className={s.amountCart}>Сумма заказа: <span>{selectedOrder.amountCart} $</span></div>
+                </div>
+                <div className={s.infoAboutOrder}>
+                    <div className={s.text}>Получатель: <div>{selectedOrder.name}</div></div>
+                    <div className={s.text}>Электронная почта: <div>{selectedOrder.email}</div></div>
+                    <div className={s.text}>Номер телефона: <div>{selectedOrder.phone}</div></div>
+                    <div className={s.text}>Комментарий к заказу: <div>{selectedOrder.message}</div></div>
+                </div>
+            </div>
         </div>
         }
     </div>

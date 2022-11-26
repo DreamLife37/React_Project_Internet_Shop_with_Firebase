@@ -44,7 +44,8 @@ export const OrderingForm: React.FC<OrderFormType> = ({
         initialValues: {
             name: nameProfile,
             email: emailProfile,
-            phone: phoneProfile
+            phone: phoneProfile,
+            message: ''
         },
         validate: (values) => {
             const errors: FormikErrorType = {};
@@ -62,9 +63,8 @@ export const OrderingForm: React.FC<OrderFormType> = ({
             return errors;
         },
         onSubmit: async values => {
+            dispatch(setAppStatus({status: "loading"}))
             if (navigator.onLine) {
-                debugger
-                dispatch(setAppStatus({status: "loading"}))
                 if (cartOrder.length > 0) {
                     dispatch(sendUserProfileDataTC({
                         name: values.name,
@@ -75,12 +75,12 @@ export const OrderingForm: React.FC<OrderFormType> = ({
                         name: values.name,
                         email: values.email,
                         phone: values.phone,
+                        message: values.message,
                         amountCart: amountCart,
                         cartOrder: cartOrder
                     }))
                         .then((res) => {
                             if (res.meta.requestStatus === "fulfilled") {
-                                debugger
                                 dispatch(setAppStatus({status: "idle"}))
                                 dispatch(removeAllItemCartTC({userId: id}))
                                 navigate('/successfulOrder');
@@ -145,6 +145,12 @@ export const OrderingForm: React.FC<OrderFormType> = ({
                     {...formik.getFieldProps('phone')} placeholder={'Телефон'} name="phone"
                     error={formik.touched.phone && Boolean(formik.errors.phone)}
                     helperText={formik.touched.phone && formik.errors.phone}
+                />
+            </FormControl>
+
+            <FormControl sx={{m: 1, width: '20ch', height: '70px'}} variant="outlined">
+                <TextField
+                    {...formik.getFieldProps('message')} placeholder={'Комментарий'} name="message"
                 />
             </FormControl>
 
