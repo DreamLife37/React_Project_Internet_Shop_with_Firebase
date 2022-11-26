@@ -4,7 +4,7 @@ import {useAuth} from "../hooks/use-auth";
 import {removeAuthData} from "../store/slices/authSlice";
 import {useAppDispatch, useAppSelector} from '../hooks/redux-hooks';
 import {ProductInCatalog,} from '../components/ProductInCatalog/ProductInCatalog';
-import {fetchAllProductsTC, fetchDataCartTC} from "../store/slices/productSlice";
+import {fetchAllProductsTC, fetchDataCartTC, fetchDataUserProfileTC} from "../store/slices/productSlice";
 import s from './HomePage.module.css'
 import {Preloader} from "../components/preloader/Preloader";
 import {setAppStatus} from "../store/slices/appSlice";
@@ -33,6 +33,7 @@ export const HomePage = () => {
         if (id != null || isAuth) {
             dispatch(fetchAllProductsTC())
             dispatch(fetchDataCartTC({userId: id}))
+            dispatch(fetchDataUserProfileTC())
         }
     }, [dispatch])
 
