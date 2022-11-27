@@ -24,7 +24,6 @@ function App() {
     const appStatus = useAppSelector(state => state.app.status)
     const dispatch = useAppDispatch()
 
-
     return (
         <div className="App">
             <MenuAppBar/>
@@ -38,9 +37,9 @@ function App() {
                     <Route path={'/'} element={<HomePage/>}/>
                     <Route path={'/cart'} element={<Cart/>}/>
                     <Route path={'/successfulOrder'} element={<SuccessfulOrder/>}/>
-                    <Route path={'/myOrders'} element={<MyOrders/>}/>
-                    <Route path={'/myOrders/order/'} element={<Order/>}/>
-                    <Route path={'/myOrders/order/:orderId'} element={<Order/>}/>
+                    <Route path={'/orders'} element={<MyOrders/>}/>
+                    {/*<Route path={'/myOrders/order/'} element={<Order/>}/>*/}
+                    <Route path={'/orders/:orderId'} element={<Order/>}/>
                 </Routes>
 
             </header>

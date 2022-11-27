@@ -33,7 +33,7 @@ export function MenuAppBar() {
 
     const handleMyOrders = () => {
         setAnchorEl(null);
-        navigate('/myorders')
+        navigate('/orders')
     };
 
     const handleLogout = () => {
@@ -75,7 +75,8 @@ export function MenuAppBar() {
                         <span style={{
                             color: "white",
                             textDecoration: "none",
-                            paddingRight: '15px'
+                            paddingRight: '15px',
+                            width:'25px'
                         }}>{`${amountCart > 0 ? (`${amountCart}$`) : ''}`}</span>
                     </Link>}
                     {isAuth && (

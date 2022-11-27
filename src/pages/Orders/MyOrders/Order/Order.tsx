@@ -1,5 +1,5 @@
 import React, {FC, useEffect} from "react";
-import {Navigate, useNavigate} from "react-router-dom";
+import {Navigate, useNavigate, useParams} from "react-router-dom";
 import s from './Order.module.css'
 import {useAppDispatch, useAppSelector} from "../../../../hooks/redux-hooks";
 import {useAuth} from "../../../../hooks/use-auth";
@@ -13,9 +13,10 @@ export const Order: FC = () => {
     const orders = useAppSelector(state => state.products.orders)
     const selectedOrderId = useAppSelector(state => state.products.selectedOrderId)
     const navigation = useNavigate()
-
+    const params = useParams<"orderId">()
+    console.log(params)
     const handleBackButton = () => {
-        navigation('/myOrders')
+        navigation('/orders')
     }
 
     useEffect(() => {
