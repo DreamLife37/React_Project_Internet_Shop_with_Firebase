@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/React_Project_Internet_Shop_with_Firebase/static/css/main.990dde66.css",
-    "main.js": "/React_Project_Internet_Shop_with_Firebase/static/js/main.0c260c53.js",
+    "main.css": "/React_Project_Internet_Shop_with_Firebase/static/css/main.9ee3dc6d.css",
+    "main.js": "/React_Project_Internet_Shop_with_Firebase/static/js/main.39541b5f.js",
     "static/js/787.de06ea95.chunk.js": "/React_Project_Internet_Shop_with_Firebase/static/js/787.de06ea95.chunk.js",
     "static/media/successfulOrder.svg": "/React_Project_Internet_Shop_with_Firebase/static/media/successfulOrder.ca425f55240ac76f43c86095dd5ca0ae.svg",
     "index.html": "/React_Project_Internet_Shop_with_Firebase/index.html",
-    "main.990dde66.css.map": "/React_Project_Internet_Shop_with_Firebase/static/css/main.990dde66.css.map",
-    "main.0c260c53.js.map": "/React_Project_Internet_Shop_with_Firebase/static/js/main.0c260c53.js.map",
+    "main.9ee3dc6d.css.map": "/React_Project_Internet_Shop_with_Firebase/static/css/main.9ee3dc6d.css.map",
+    "main.39541b5f.js.map": "/React_Project_Internet_Shop_with_Firebase/static/js/main.39541b5f.js.map",
     "787.de06ea95.chunk.js.map": "/React_Project_Internet_Shop_with_Firebase/static/js/787.de06ea95.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.990dde66.css",
-    "static/js/main.0c260c53.js"
+    "static/css/main.9ee3dc6d.css",
+    "static/js/main.39541b5f.js"
   ]
 }
