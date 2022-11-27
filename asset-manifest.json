@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/React_Project_Internet_Shop/static/css/main.990dde66.css",
-    "main.js": "/React_Project_Internet_Shop/static/js/main.d62f1246.js",
-    "static/js/787.de06ea95.chunk.js": "/React_Project_Internet_Shop/static/js/787.de06ea95.chunk.js",
-    "static/media/successfulOrder.svg": "/React_Project_Internet_Shop/static/media/successfulOrder.ca425f55240ac76f43c86095dd5ca0ae.svg",
-    "index.html": "/React_Project_Internet_Shop/index.html",
-    "main.990dde66.css.map": "/React_Project_Internet_Shop/static/css/main.990dde66.css.map",
-    "main.d62f1246.js.map": "/React_Project_Internet_Shop/static/js/main.d62f1246.js.map",
-    "787.de06ea95.chunk.js.map": "/React_Project_Internet_Shop/static/js/787.de06ea95.chunk.js.map"
+    "main.css": "/React_Project_Internet_Shop_with_Firebase/static/css/main.990dde66.css",
+    "main.js": "/React_Project_Internet_Shop_with_Firebase/static/js/main.c09d73ed.js",
+    "static/js/787.de06ea95.chunk.js": "/React_Project_Internet_Shop_with_Firebase/static/js/787.de06ea95.chunk.js",
+    "static/media/successfulOrder.svg": "/React_Project_Internet_Shop_with_Firebase/static/media/successfulOrder.ca425f55240ac76f43c86095dd5ca0ae.svg",
+    "index.html": "/React_Project_Internet_Shop_with_Firebase/index.html",
+    "main.990dde66.css.map": "/React_Project_Internet_Shop_with_Firebase/static/css/main.990dde66.css.map",
+    "main.c09d73ed.js.map": "/React_Project_Internet_Shop_with_Firebase/static/js/main.c09d73ed.js.map",
+    "787.de06ea95.chunk.js.map": "/React_Project_Internet_Shop_with_Firebase/static/js/787.de06ea95.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.990dde66.css",
-    "static/js/main.d62f1246.js"
+    "static/js/main.c09d73ed.js"
   ]
 }
