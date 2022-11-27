@@ -33,6 +33,7 @@ export const OrderingForm: React.FC<OrderFormType> = ({
     const amountCart = useAppSelector(state => state.products.cart.amount)
     const nameProfile = useAppSelector(state => state.products.profile.name)
     const emailProfile = useAppSelector(state => state.products.profile.email)
+    const emailAuth = useAppSelector(state => state.auth.email)
     const phoneProfile = useAppSelector(state => state.products.profile.phone)
 
 
@@ -43,7 +44,7 @@ export const OrderingForm: React.FC<OrderFormType> = ({
     const formik = useFormik({
         initialValues: {
             name: nameProfile,
-            email: emailProfile,
+            email: emailAuth,
             phone: phoneProfile,
             message: ''
         },

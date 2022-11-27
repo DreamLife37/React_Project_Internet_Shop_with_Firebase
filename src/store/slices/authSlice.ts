@@ -3,7 +3,7 @@ import {setAppStatus} from "./appSlice";
 import {getAuth, signOut} from "firebase/auth";
 import {handleServerNetworkError} from "../../utils/errorUtitls";
 
-export const logoutTC = createAsyncThunk<any>(
+export const logoutTC = createAsyncThunk(
     'product/logout',
     async (_, {dispatch}) => {
         dispatch(setAppStatus({status: "loading"}))
@@ -18,7 +18,6 @@ export const logoutTC = createAsyncThunk<any>(
                 }
             }).catch((error) => {
             handleServerNetworkError(dispatch)
-
         })
     })
 
@@ -49,9 +48,13 @@ const
                 state.email = null
                 state.token = null
                 state.id = null
-            }
+            },
         }
     })
 
 export const {setAuthData, removeAuthData} = authSlice.actions
 export const authReducer = authSlice.reducer
+
+function removeUserData() {
+    throw new Error("Function not implemented.");
+}

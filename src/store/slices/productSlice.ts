@@ -73,17 +73,22 @@ export const fetchDataCartTC = createAsyncThunk(
         if (param.userId != null) {
             dispatch(setAppStatus({status: "loading"}))
             try {
+
                 const cartRef = doc(db, '/cart', param.userId)
                 onSnapshot(cartRef, (itemCart) => {
+                    debugger
+                    console.log('itemCart',itemCart)
                     if (itemCart.exists()) {
+                        console.log(itemCart.exists())
                         dispatch(setDataCart(itemCart.data().cart))
                         const state = getState() as AppRootStateType
                         const itemsArr = state.products.cart.items
                         const amount = (itemsArr.reduce((a: any, v: { price: number; count: number }) => a = a + v.price * v.count, 0));
                         dispatch(setAmountCart(amount))
-                    } else {
-                        throw new Error("New error")
                     }
+                    // else {
+                    //     throw new Error("New error")
+                    // }
                 });
             } catch (e) {
                 handleServerNetworkError(dispatch)
@@ -156,7 +161,7 @@ export const removeAllItemCartTC = createAsyncThunk(
 export const sendOrderTC = createAsyncThunk(
     'product/sendOrder',
     async (param: {
-        name: string, email: string, phone: string, amountCart: number, message: string, cartOrder: Array<{
+        name: string, email: string | null, phone: string, amountCart: number, message: string, cartOrder: Array<{
             name: string,
             price: number,
             count: number,
@@ -208,6 +213,10 @@ export const fetchDataOrdersTC = createAsyncThunk(
                         if (itemOrder.exists()) {
                             dispatch(setDataOrders(itemOrder.data().orders))
                             dispatch(setAppStatus({status: "idle"}))
+                            return
+                        } else {
+                            dispatch(setAppStatus({status: "idle"}))
+                            return
                         }
                     })
                 } else {
@@ -224,7 +233,7 @@ export const fetchDataOrdersTC = createAsyncThunk(
 export const sendUserProfileDataTC = createAsyncThunk(
     'product/sendUserProfileData',
     async (param: {
-        name: string, email: string, phone: string
+        name: string, email: string | null, phone: string
     }, {dispatch, getState}) => {
         debugger
         dispatch(setAppStatus({status: "loading"}))
@@ -356,6 +365,17 @@ const productSlice = createSlice({
             if (action.payload !== undefined) {
                 state.profile = action.payload
             }
+        },
+        removeUserData(state) {
+            state.profile = {
+                name: '',
+                email: '',
+                phone: ''
+            }
+            state.cart = {
+                items: [],
+                amount: 0
+            }
         }
     },
 })
@@ -365,6 +385,7 @@ export const {
     setAmountCart,
     setDataOrders,
     setSelectedOrder,
-    setDataUserProfile
+    setDataUserProfile,
+    removeUserData
 } = productSlice.actions
 export const productReducer = productSlice.reducer
