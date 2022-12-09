@@ -1,5 +1,6 @@
 {
   "name": "internet_shop_with_firebase",
+  "homepage": "https://dreamlife37.github.io/React_Project_Internet_Shop_with_Firebase/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -29,7 +30,6 @@
     "typescript": "^4.8.4",
     "web-vitals": "^2.1.4"
   },
-  "homepage": "https://dreamlife37.github.io/React_Project_Internet_Shop/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

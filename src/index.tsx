@@ -17,6 +17,7 @@ root.render(
     <React.StrictMode>
         <Provider store={store}>
             <HashRouter>
+            {/*<HashRouter basename={'/React_Project_Internet_Shop'}>*/}
                 <App/>
             </HashRouter>
         </Provider>

@@ -14,7 +14,8 @@ import {useAppDispatch, useAppSelector} from "../../hooks/redux-hooks";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import {logoutTC} from "../../store/slices/authSlice";
 // import {createTheme} from "@mui/material";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import {ThemeProvider, createTheme} from '@mui/material/styles';
+import { removeUserData } from '../../store/slices/productSlice';
 
 export function MenuAppBar() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -33,11 +34,12 @@ export function MenuAppBar() {
 
     const handleMyOrders = () => {
         setAnchorEl(null);
-        navigate('/myorders')
+        navigate('/orders')
     };
 
     const handleLogout = () => {
         dispatch(logoutTC())
+        dispatch(removeUserData())
         setAnchorEl(null);
     }
 
@@ -53,65 +55,66 @@ export function MenuAppBar() {
     return (
         <Box sx={{flexGrow: 1, height: '60px'}}>
             <ThemeProvider theme={darkTheme}>
-            <AppBar position="static" color="primary" >
-                <Toolbar>
-                    {/*<IconButton*/}
-                    {/*    size="large"*/}
-                    {/*    edge="start"*/}
-                    {/*    color="inherit"*/}
-                    {/*    aria-label="menu"*/}
-                    {/*    sx={{mr: 2}}*/}
-                    {/*>*/}
-                    {/*    <MenuIcon/>*/}
-                    {/*</IconButton>*/}
-                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                        <div style={{cursor: "pointer"}} onClick={() => {
-                            navigate('/')
-                        }}>Интернет магазин by DevAndreyIT
-                        </div>
-                    </Typography>
-                    {isAuth && <Link to={'/cart'} style={{display: "flex", textDecoration: "none"}}>
-                        <ShoppingCartIcon style={{color: "white", paddingRight: '10px'}}/>
-                        <span style={{
-                            color: "white",
-                            textDecoration: "none",
-                            paddingRight: '15px'
-                        }}>{`${amountCart > 0 ? (`${amountCart}$`) : ''}`}</span>
-                    </Link>}
-                    {isAuth && (
-                        <div>
-                            <IconButton
-                                size="large"
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={handleMenu}
-                                color="inherit"
-                            >
-                                <AccountCircle/>
-                            </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={anchorEl}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={Boolean(anchorEl)}
-                                onClose={handleClose}
-                            >
-                                <MenuItem onClick={handleMyOrders}>Мои заказы</MenuItem>
-                                <MenuItem onClick={handleLogout}>Выход</MenuItem>
-                            </Menu>
-                        </div>
-                    )}
-                </Toolbar>
-            </AppBar>
+                <AppBar position="static" color="primary">
+                    <Toolbar>
+                        {/*<IconButton*/}
+                        {/*    size="large"*/}
+                        {/*    edge="start"*/}
+                        {/*    color="inherit"*/}
+                        {/*    aria-label="menu"*/}
+                        {/*    sx={{mr: 2}}*/}
+                        {/*>*/}
+                        {/*    <MenuIcon/>*/}
+                        {/*</IconButton>*/}
+                        <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                            <div style={{cursor: "pointer"}} onClick={() => {
+                                navigate('/')
+                            }}>Интернет магазин by DevAndreyIT
+                            </div>
+                        </Typography>
+                        {isAuth && <Link to={'/cart'} style={{display: "flex", textDecoration: "none"}}>
+                            <ShoppingCartIcon style={{color: "white", paddingRight: '10px'}}/>
+                            <span style={{
+                                color: "white",
+                                textDecoration: "none",
+                                paddingRight: '15px',
+                                width: '25px'
+                            }}>{`${amountCart > 0 ? (`${amountCart}$`) : ''}`}</span>
+                        </Link>}
+                        {isAuth && (
+                            <div>
+                                <IconButton
+                                    size="large"
+                                    aria-label="account of current user"
+                                    aria-controls="menu-appbar"
+                                    aria-haspopup="true"
+                                    onClick={handleMenu}
+                                    color="inherit"
+                                >
+                                    <AccountCircle/>
+                                </IconButton>
+                                <Menu
+                                    id="menu-appbar"
+                                    anchorEl={anchorEl}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorEl)}
+                                    onClose={handleClose}
+                                >
+                                    <MenuItem onClick={handleMyOrders}>Мои заказы</MenuItem>
+                                    <MenuItem onClick={handleLogout}>Выход</MenuItem>
+                                </Menu>
+                            </div>
+                        )}
+                    </Toolbar>
+                </AppBar>
             </ThemeProvider>
         </Box>
     );

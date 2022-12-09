@@ -23,7 +23,8 @@ export const MyOrders = () => {
 
     const handleOrder = (selectedOrderId: string) => {
         dispatch(setSelectedOrder(selectedOrderId))
-        navigation('/myOrders/order/')
+        console.log(selectedOrderId)
+        navigation('/orders/' + selectedOrderId)
     }
 
     return <div className={s.container}>

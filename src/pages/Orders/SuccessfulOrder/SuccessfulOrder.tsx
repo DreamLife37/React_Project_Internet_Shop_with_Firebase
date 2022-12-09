@@ -14,6 +14,6 @@ export const SuccessfulOrder = () => {
         <h2 className={s.h2}>Заказ успешно оформлен</h2>
         <h3 className={s.h3}>В ближайшее время наши менеджеры свяжутся с вами для подтверждения заказа</h3>
         <ButtonCustomBlue handleButton={() => navigate('/')} title={'Каталог товаров'} styleFontSize={'14px'}/>
-        <div><ButtonCustomBlue handleButton={() => navigate('/myorders')} title={'Мои заказы'} styleFontSize={'14px'}/></div>
+        <div><ButtonCustomBlue handleButton={() => navigate('/orders')} title={'Мои заказы'} styleFontSize={'14px'}/></div>
     </div>
 }

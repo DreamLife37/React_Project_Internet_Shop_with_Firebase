@@ -5,20 +5,25 @@ import {Link, useNavigate} from "react-router-dom";
 import React from "react";
 import {useAppDispatch} from "../hooks/redux-hooks";
 import firebase from "firebase/app";
-import {setAppError} from "../store/slices/appSlice";
+import {setAppError, setAppStatus} from "../store/slices/appSlice";
 
 export const SignUp = () => {
     const dispatch = useAppDispatch()
     const navigation = useNavigate()
+
     const handleRegister = (email: string, password: string) => {
+        dispatch(setAppStatus({status: "loading"}))
         const auth = getAuth();
         createUserWithEmailAndPassword(auth, email, password)
             .then(({user}) => {
-                dispatch(setAuthData({email: user.email, token: user.refreshToken, id: user.uid}))
-                return navigation("/")
+                if (user.email) {
+                    dispatch(setAuthData({email: user.email, token: user.refreshToken, id: user.uid}))
+                    dispatch(setAppStatus({status: "idle"}))
+                    return navigation("/")
+                }
             })
             .catch((err: firebase.FirebaseError) => {
-                console.log(err)
+                dispatch(setAppStatus({status: "failed"}))
                 if (err.code === 'auth/email-already-in-use') {
                     dispatch(setAppError({
                         error: {
@@ -26,6 +31,7 @@ export const SignUp = () => {
                             typeError: 'error'
                         }
                     }))
+                    return
                 }
                 if (err.code === 'auth/weak-password') {
                     dispatch(setAppError({error: {messageError: `Минимальный пароль 6 символов`, typeError: 'error'}}))

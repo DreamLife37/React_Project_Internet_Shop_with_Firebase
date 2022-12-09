@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
     collection,
     deleteField,
@@ -81,9 +81,10 @@ export const fetchDataCartTC = createAsyncThunk(
                         const itemsArr = state.products.cart.items
                         const amount = (itemsArr.reduce((a: any, v: { price: number; count: number }) => a = a + v.price * v.count, 0));
                         dispatch(setAmountCart(amount))
-                    } else {
-                        throw new Error("New error")
                     }
+                    // else {
+                    //     throw new Error("New error")
+                    // }
                 });
             } catch (e) {
                 handleServerNetworkError(dispatch)
@@ -156,7 +157,7 @@ export const removeAllItemCartTC = createAsyncThunk(
 export const sendOrderTC = createAsyncThunk(
     'product/sendOrder',
     async (param: {
-        name: string, email: string, phone: string, amountCart: number, message: string, cartOrder: Array<{
+        name: string, email: string | null, phone: string, amountCart: number, message: string, cartOrder: Array<{
             name: string,
             price: number,
             count: number,
@@ -199,7 +200,6 @@ export const fetchDataOrdersTC = createAsyncThunk(
         dispatch(setAppStatus({status: "loading"}))
         const state = getState() as AppRootStateType
         const userId = state.auth.id
-        debugger
         if (userId != null) {
             try {
                 if (navigator.onLine) {
@@ -208,6 +208,10 @@ export const fetchDataOrdersTC = createAsyncThunk(
                         if (itemOrder.exists()) {
                             dispatch(setDataOrders(itemOrder.data().orders))
                             dispatch(setAppStatus({status: "idle"}))
+                            return
+                        } else {
+                            dispatch(setAppStatus({status: "idle"}))
+                            return
                         }
                     })
                 } else {
@@ -224,9 +228,8 @@ export const fetchDataOrdersTC = createAsyncThunk(
 export const sendUserProfileDataTC = createAsyncThunk(
     'product/sendUserProfileData',
     async (param: {
-        name: string, email: string, phone: string
+        name: string, email: string | null, phone: string
     }, {dispatch, getState}) => {
-        debugger
         dispatch(setAppStatus({status: "loading"}))
         const state = getState() as AppRootStateType
         const userId = state.auth.id
@@ -256,7 +259,6 @@ export const fetchDataUserProfileTC = createAsyncThunk(
         dispatch(setAppStatus({status: "loading"}))
         const state = getState() as AppRootStateType
         const userId = state.auth.id
-        debugger
         if (userId != null) {
             try {
                 if (navigator.onLine) {
@@ -331,12 +333,18 @@ const productSlice = createSlice({
         setDataProducts(state, action) {
             state.products = action.payload
         },
-        setDataCart(state, action) {
+        setDataCart(state, action: PayloadAction<{
+            title: string, availability: number, count: number, idItem: string, image: string, price: number,
+        }>) {
             if (action.payload === undefined) {
                 state.cart.items = []
             } else {
-                const values = Object.values(action.payload);
                 // @ts-ignore
+                const values: ItemCartType[] = Object.values(action.payload);
+                values.sort((a, b) => {
+                    if (a.title > b.title) return 1
+                    return -1
+                })
                 state.cart.items = values
             }
         },
@@ -356,6 +364,17 @@ const productSlice = createSlice({
             if (action.payload !== undefined) {
                 state.profile = action.payload
             }
+        },
+        removeUserData(state) {
+            state.profile = {
+                name: '',
+                email: '',
+                phone: ''
+            }
+            state.cart = {
+                items: [],
+                amount: 0
+            }
         }
     },
 })
@@ -365,6 +384,7 @@ export const {
     setAmountCart,
     setDataOrders,
     setSelectedOrder,
-    setDataUserProfile
+    setDataUserProfile,
+    removeUserData
 } = productSlice.actions
 export const productReducer = productSlice.reducer
