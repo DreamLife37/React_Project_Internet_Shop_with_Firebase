@@ -5,11 +5,10 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Button from '@mui/material/Button';
 import s from './Form.module.css'
 import {TextField} from "@mui/material";
 import {useFormik} from "formik";
-import {useAppDispatch, useAppSelector} from "../../hooks/redux-hooks";
+import {useAppDispatch} from "../../hooks/redux-hooks";
 import {setAppError} from "../../store/slices/appSlice";
 import {ButtonWithLoading} from "../ButtonWithLoading/ButtonWithLoading";
 

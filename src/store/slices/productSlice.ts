@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
     collection,
     deleteField,
@@ -73,13 +73,9 @@ export const fetchDataCartTC = createAsyncThunk(
         if (param.userId != null) {
             dispatch(setAppStatus({status: "loading"}))
             try {
-
                 const cartRef = doc(db, '/cart', param.userId)
                 onSnapshot(cartRef, (itemCart) => {
-                    debugger
-                    console.log('itemCart',itemCart)
                     if (itemCart.exists()) {
-                        console.log(itemCart.exists())
                         dispatch(setDataCart(itemCart.data().cart))
                         const state = getState() as AppRootStateType
                         const itemsArr = state.products.cart.items
@@ -204,7 +200,6 @@ export const fetchDataOrdersTC = createAsyncThunk(
         dispatch(setAppStatus({status: "loading"}))
         const state = getState() as AppRootStateType
         const userId = state.auth.id
-        debugger
         if (userId != null) {
             try {
                 if (navigator.onLine) {
@@ -235,7 +230,6 @@ export const sendUserProfileDataTC = createAsyncThunk(
     async (param: {
         name: string, email: string | null, phone: string
     }, {dispatch, getState}) => {
-        debugger
         dispatch(setAppStatus({status: "loading"}))
         const state = getState() as AppRootStateType
         const userId = state.auth.id
@@ -265,7 +259,6 @@ export const fetchDataUserProfileTC = createAsyncThunk(
         dispatch(setAppStatus({status: "loading"}))
         const state = getState() as AppRootStateType
         const userId = state.auth.id
-        debugger
         if (userId != null) {
             try {
                 if (navigator.onLine) {
@@ -340,12 +333,18 @@ const productSlice = createSlice({
         setDataProducts(state, action) {
             state.products = action.payload
         },
-        setDataCart(state, action) {
+        setDataCart(state, action: PayloadAction<{
+            title: string, availability: number, count: number, idItem: string, image: string, price: number,
+        }>) {
             if (action.payload === undefined) {
                 state.cart.items = []
             } else {
-                const values = Object.values(action.payload);
                 // @ts-ignore
+                const values: ItemCartType[] = Object.values(action.payload);
+                values.sort((a, b) => {
+                    if (a.title > b.title) return 1
+                    return -1
+                })
                 state.cart.items = values
             }
         },

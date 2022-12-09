@@ -30,7 +30,7 @@ export const Login = () => {
             })
             .catch((err: firebase.FirebaseError) => {
                 dispatch(setAppStatus({status: "failed"}))
-                if (err.code === 'auth/user-not-found') {
+                if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
                     dispatch(setAppError({error: {messageError: `Не верный логин или пароль`, typeError: 'error'}}))
                 } else {
                     dispatch(setAppError({error: {messageError: `Ошибка`, typeError: 'error'}}))
