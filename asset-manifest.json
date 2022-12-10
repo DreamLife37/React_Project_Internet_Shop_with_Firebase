@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/React_Project_Internet_Shop_with_Firebase/static/css/main.9ee3dc6d.css",
-    "main.js": "/React_Project_Internet_Shop_with_Firebase/static/js/main.39541b5f.js",
+    "main.js": "/React_Project_Internet_Shop_with_Firebase/static/js/main.09407b3d.js",
     "static/js/787.de06ea95.chunk.js": "/React_Project_Internet_Shop_with_Firebase/static/js/787.de06ea95.chunk.js",
     "static/media/successfulOrder.svg": "/React_Project_Internet_Shop_with_Firebase/static/media/successfulOrder.ca425f55240ac76f43c86095dd5ca0ae.svg",
     "index.html": "/React_Project_Internet_Shop_with_Firebase/index.html",
     "main.9ee3dc6d.css.map": "/React_Project_Internet_Shop_with_Firebase/static/css/main.9ee3dc6d.css.map",
-    "main.39541b5f.js.map": "/React_Project_Internet_Shop_with_Firebase/static/js/main.39541b5f.js.map",
+    "main.09407b3d.js.map": "/React_Project_Internet_Shop_with_Firebase/static/js/main.09407b3d.js.map",
     "787.de06ea95.chunk.js.map": "/React_Project_Internet_Shop_with_Firebase/static/js/787.de06ea95.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9ee3dc6d.css",
-    "static/js/main.39541b5f.js"
+    "static/js/main.09407b3d.js"
   ]
 }
