@@ -166,7 +166,6 @@ export const sendOrderTC = createAsyncThunk(
     }, {dispatch, getState}) => {
         dispatch(setAppStatus({status: "loading"}))
         const state = getState() as AppRootStateType
-        debugger
         const userId = state.auth.id
         const orders = state.products.orders
         if (userId != null) {
