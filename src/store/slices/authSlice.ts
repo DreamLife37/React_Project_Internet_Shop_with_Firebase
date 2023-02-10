@@ -2,6 +2,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {setAppStatus} from "./appSlice";
 import {getAuth, signOut} from "firebase/auth";
 import {handleServerNetworkError} from "../../utils/errorUtitls";
+import {getStoreLocal} from "../../utils/localStorage";
 
 export const logoutTC = createAsyncThunk(
     'product/logout',
@@ -12,6 +13,7 @@ export const logoutTC = createAsyncThunk(
             .then(() => {
                 if (navigator.onLine) {
                     dispatch(removeAuthData())
+                    localStorage.removeItem('email')
                     dispatch(setAppStatus({status: "succeeded"}))
                 } else {
                     throw new Error("No Internet")
@@ -29,7 +31,7 @@ type AuthDataType = {
 }
 
 const initialState = {
-    email: null,
+    email: getStoreLocal('email'),
     token: null,
     id: null
 } as AuthDataType

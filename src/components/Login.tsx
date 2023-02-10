@@ -6,6 +6,7 @@ import React from "react";
 import {useAppDispatch} from "../hooks/redux-hooks";
 import {setAppError, setAppStatus} from "../store/slices/appSlice";
 import firebase from 'firebase/app';
+import {saveToStorage} from "../utils/localStorage";
 
 export type ResponseType = {
     accessToken: string
@@ -25,6 +26,7 @@ export const Login = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then(({user}) => {
                 dispatch(setAuthData({email: user.email, token: user.refreshToken, id: user.uid}))
+                saveToStorage(email)
                 dispatch(setAppStatus({status: "idle"}))
                 return navigation("/")
             })
